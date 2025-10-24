@@ -637,7 +637,6 @@ export function InteractiveOdontogram({
                     key={tooth}
                     toothNumber={tooth}
                     data={teethData[tooth]}
-                    selectedSymbol={selectedSymbol || undefined}
                     onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                     onClick={() => handleToothClick(tooth)}
                     readOnly={readOnly}
