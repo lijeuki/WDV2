@@ -4,9 +4,11 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import Odontogram from '@/components/organisms/Odontogram';
+import { InteractiveOdontogram } from '@/components/organisms/InteractiveOdontogram';
+import { SymbolPalette } from '@/components/molecules/SymbolPalette';
 import SOAPNotesForm from '@/components/organisms/SOAPNotesForm';
 import { ExamData, OdontogramData, ToothNumber, SOAPNotes } from '@/lib/types/dental';
+import { DentalSymbol, ToothData } from '@/lib/odontogram-types';
 import { ArrowLeft, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function SmartExam() {
@@ -31,6 +33,10 @@ export default function SmartExam() {
   });
 
   const [soapNotes, setSOAPNotes] = useState<Partial<SOAPNotes> | null>(null);
+  
+  // InteractiveOdontogram state
+  const [selectedSymbol, setSelectedSymbol] = useState<DentalSymbol | null>(null);
+  const [teethData, setTeethData] = useState<Record<string, ToothData>>({});
 
   const updateExamData = (field: keyof ExamData, value: any) => {
     setExamData(prev => ({
@@ -39,8 +45,10 @@ export default function SmartExam() {
     }));
   };
 
-  const handleOdontogramChange = (data: OdontogramData) => {
-    updateExamData('odontogramData', data);
+  const handleOdontogramChange = (data: Record<string, ToothData>) => {
+    setTeethData(data);
+    // Also update the exam data for compatibility
+    updateExamData('odontogramData', { teeth: data });
   };
 
   const getTeethRequiringTreatment = (): ToothNumber[] => {
@@ -209,10 +217,28 @@ export default function SmartExam() {
           <div className="space-y-4">
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">Odontogram Charting</h2>
-              <Odontogram
-                data={examData.odontogramData!}
-                onChange={handleOdontogramChange}
-              />
+              
+              {/* Grid layout with odontogram on left and symbol palette on right */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                {/* Odontogram - takes 3 columns */}
+                <div className="lg:col-span-3">
+                  <InteractiveOdontogram
+                    initialData={teethData}
+                    onDataChange={handleOdontogramChange}
+                    selectedSymbol={selectedSymbol}
+                    readOnly={false}
+                  />
+                </div>
+                
+                {/* Symbol Palette - takes 1 column on the right */}
+                <div className="lg:col-span-1">
+                  <SymbolPalette
+                    selectedSymbol={selectedSymbol}
+                    onSymbolSelect={setSelectedSymbol}
+                    compact={false}
+                  />
+                </div>
+              </div>
             </Card>
 
             <div className="flex justify-between">
