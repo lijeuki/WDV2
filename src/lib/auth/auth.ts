@@ -24,9 +24,14 @@ export async function signIn(email: string, password: string) {
     .from('users')
     .select('*')
     .eq('auth_id', data.user.id)
-    .single();
+    .maybeSingle();
 
   if (profileError) throw profileError;
+  
+  // If no profile exists, throw error
+  if (!profile) {
+    throw new Error('User profile not found. Please contact administrator.');
+  }
 
   return {
     session: data.session,
@@ -92,10 +97,15 @@ export async function getCurrentUser(): Promise<User | null> {
     .from('users')
     .select('*')
     .eq('auth_id', session.user.id)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching user profile:', error);
+    return null;
+  }
+
+  if (!profile) {
+    console.error('User profile not found in database');
     return null;
   }
 
