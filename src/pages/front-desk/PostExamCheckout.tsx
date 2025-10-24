@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import Odontogram from '@/components/organisms/Odontogram';
-import { CheckCircle2, Printer, ArrowRight, CreditCard } from 'lucide-react';
+import { CheckCircle2, Printer, ArrowRight, CreditCard, AlertTriangle, Clock } from 'lucide-react';
+import { PostExamRouting } from '@/lib/workflow/post-exam-router';
 
 type CheckoutStep = 'review' | 'payment' | 'schedule' | 'complete';
 
@@ -15,6 +16,7 @@ export default function PostExamCheckout() {
   const location = useLocation();
   const treatmentPlan = location.state?.treatmentPlan;
   const examData = location.state?.examData;
+  const routing: PostExamRouting | undefined = location.state?.routing;
 
   const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>('review');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'insurance' | 'split'>('cash');
@@ -50,6 +52,54 @@ export default function PostExamCheckout() {
           <h1 className="text-2xl font-bold">Post-Exam Checkout</h1>
           <p className="text-gray-600">Patient ID: {patientId}</p>
         </div>
+
+        {/* Routing Alert */}
+        {routing && (
+          <Card className={`p-4 ${
+            routing.urgency === 'urgent' ? 'bg-red-50 border-red-200' :
+            routing.urgency === 'high' ? 'bg-yellow-50 border-yellow-200' :
+            'bg-blue-50 border-blue-200'
+          }`}>
+            <div className="flex items-start gap-3">
+              {routing.urgency === 'urgent' ? (
+                <AlertTriangle className="size-6 text-red-600 mt-0.5" />
+              ) : routing.urgency === 'high' ? (
+                <AlertTriangle className="size-6 text-yellow-600 mt-0.5" />
+              ) : (
+                <Clock className="size-6 text-blue-600 mt-0.5" />
+              )}
+              <div className="flex-1">
+                <h3 className={`font-semibold ${
+                  routing.urgency === 'urgent' ? 'text-red-900' :
+                  routing.urgency === 'high' ? 'text-yellow-900' :
+                  'text-blue-900'
+                }`}>
+                  {routing.urgency === 'urgent' ? '🚨 URGENT CASE' :
+                   routing.urgency === 'high' ? '⚠️ HIGH-VALUE TREATMENT' :
+                   '✅ STANDARD CHECKOUT'}
+                </h3>
+                <p className={`text-sm mt-1 ${
+                  routing.urgency === 'urgent' ? 'text-red-800' :
+                  routing.urgency === 'high' ? 'text-yellow-800' :
+                  'text-blue-800'
+                }`}>
+                  {routing.reason}
+                </p>
+                <div className="mt-3">
+                  <p className="text-xs font-medium mb-2">Suggested Actions:</p>
+                  <ul className="text-xs space-y-1">
+                    {routing.suggestedActions.map((action, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <CheckCircle2 className="size-3" />
+                        {action}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </Card>
+        )}
 
         {/* Progress */}
         <Card className="p-4">

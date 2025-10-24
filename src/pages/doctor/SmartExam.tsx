@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import Odontogram from '@/components/organisms/Odontogram';
 import { ExamData, OdontogramData, ToothNumber } from '@/lib/types/dental';
-import { ArrowLeft, Save, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Save, CheckCircle2, AlertCircle, AlertTriangle } from 'lucide-react';
 
 export default function SmartExam() {
   const navigate = useNavigate();
@@ -52,10 +52,19 @@ export default function SmartExam() {
     // In real app, save to Supabase
     console.log('Completing exam:', examData);
     
-    // Navigate to treatment plan builder
-    navigate(`/doctor/treatment-plan/new/${patientId}`, {
-      state: { examData }
-    });
+    // Check if there are teeth requiring treatment
+    const requiresTreatment = getTeethRequiringTreatment().length > 0;
+    
+    if (requiresTreatment) {
+      // Navigate to treatment plan builder
+      navigate(`/doctor/treatment-plan/new/${patientId}`, {
+        state: { examData }
+      });
+    } else {
+      // No treatment needed, show success and return to patient list
+      alert('Examination completed successfully! No treatment required at this time.');
+      navigate('/doctor/patients');
+    }
   };
 
   const progressSteps = [

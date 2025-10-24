@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import Odontogram from '@/components/organisms/Odontogram';
 import { ExamData, ToothNumber } from '@/lib/types/dental';
-import { ArrowLeft, Plus, Trash2, Save, Send } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Save, Send, AlertCircle, AlertTriangle } from 'lucide-react';
+import { determinePostExamRouting, generateRoutingNotification, estimateCheckoutDuration } from '@/lib/workflow/post-exam-router';
 
 interface TreatmentProcedure {
   id: string;
@@ -152,9 +153,35 @@ export default function TreatmentPlanBuilder() {
 
   const handlePresentPlan = () => {
     console.log('Presenting plan:', treatmentPlan);
-    // Navigate to checkout/presentation flow
+    
+    // Determine routing based on treatment complexity
+    const routing = determinePostExamRouting(
+      examData!,
+      treatmentPlan,
+      patientId
+    );
+    
+    const notification = generateRoutingNotification(routing, 'Patient'); // In real app, use actual patient name
+    const estimatedTime = estimateCheckoutDuration(routing);
+    
+    console.log('📋 Post-Exam Routing:', routing);
+    console.log('📢 Notification:', notification);
+    console.log('⏱️ Estimated checkout time:', estimatedTime, 'minutes');
+    
+    // Show routing info to doctor
+    if (routing.urgency === 'urgent') {
+      alert(`⚠️ URGENT: This patient requires immediate scheduling.\n\nReason: ${routing.reason}\n\nThe front desk will be notified to prioritize this patient.`);
+    } else if (routing.urgency === 'high') {
+      alert(`📋 High-Value Treatment Plan\n\nReason: ${routing.reason}\n\nPatient will receive detailed consultation at checkout.`);
+    }
+    
+    // Navigate to checkout with routing info
     navigate(`/checkout/${patientId}`, {
-      state: { treatmentPlan, examData }
+      state: { 
+        treatmentPlan, 
+        examData,
+        routing 
+      }
     });
   };
 
