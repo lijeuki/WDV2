@@ -13,7 +13,6 @@ import {
   DentalSymbol,
   ADULT_TEETH,
   PEDIATRIC_TEETH,
-  getToothType,
   DENTAL_SYMBOLS
 } from "../../lib/odontogram-types";
 
@@ -31,7 +30,6 @@ interface InteractiveOdontogramProps {
 function InteractiveTooth({ 
   toothNumber,
   data,
-  selectedSymbol,
   onSurfaceClick,
   onClick,
   readOnly = false,
@@ -39,7 +37,6 @@ function InteractiveTooth({
 }: { 
   toothNumber: string;
   data?: ToothData;
-  selectedSymbol?: DentalSymbol;
   onSurfaceClick: (surface: ToothSurface) => void;
   onClick: () => void;
   readOnly?: boolean;
@@ -341,8 +338,6 @@ export function InteractiveOdontogram({
   
   // Use external symbol if provided
   const selectedSymbol = externalSelectedSymbol;
-  
-  const teeth = dentitionType === 'adult' ? ADULT_TEETH : PEDIATRIC_TEETH;
 
   const handleSurfaceClick = (toothNumber: string, surface: ToothSurface) => {
     if (readOnly || !selectedSymbol) return;
@@ -508,7 +503,6 @@ export function InteractiveOdontogram({
                     key={tooth}
                     toothNumber={tooth}
                     data={teethData[tooth]}
-                    selectedSymbol={selectedSymbol || undefined}
                     onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                     onClick={() => handleToothClick(tooth)}
                     readOnly={readOnly}
@@ -524,7 +518,6 @@ export function InteractiveOdontogram({
                     <InteractiveTooth
                       toothNumber={tooth}
                       data={teethData[tooth]}
-                      selectedSymbol={selectedSymbol || undefined}
                       onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                       onClick={() => handleToothClick(tooth)}
                       readOnly={readOnly}
@@ -547,7 +540,6 @@ export function InteractiveOdontogram({
                     key={tooth}
                     toothNumber={tooth}
                     data={teethData[tooth]}
-                    selectedSymbol={selectedSymbol || undefined}
                     onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                     onClick={() => handleToothClick(tooth)}
                     readOnly={readOnly}
@@ -563,7 +555,6 @@ export function InteractiveOdontogram({
                     <InteractiveTooth
                       toothNumber={tooth}
                       data={teethData[tooth]}
-                      selectedSymbol={selectedSymbol || undefined}
                       onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                       onClick={() => handleToothClick(tooth)}
                       readOnly={readOnly}
@@ -589,7 +580,6 @@ export function InteractiveOdontogram({
                     <InteractiveTooth
                       toothNumber={tooth}
                       data={teethData[tooth]}
-                      selectedSymbol={selectedSymbol || undefined}
                       onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                       onClick={() => handleToothClick(tooth)}
                       readOnly={readOnly}
@@ -628,7 +618,6 @@ export function InteractiveOdontogram({
                     <InteractiveTooth
                       toothNumber={tooth}
                       data={teethData[tooth]}
-                      selectedSymbol={selectedSymbol || undefined}
                       onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                       onClick={() => handleToothClick(tooth)}
                       readOnly={readOnly}
