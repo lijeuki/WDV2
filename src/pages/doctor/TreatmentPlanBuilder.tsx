@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import Odontogram from '@/components/organisms/Odontogram';
 import { TreatmentPlanScheduler } from '@/components/organisms/TreatmentPlanScheduler';
 import { ExamData, ToothNumber, TreatmentProcedure, TreatmentPlan } from '@/lib/types/dental';
-import { ArrowLeft, Plus, Trash2, Save, Send, AlertCircle, AlertTriangle, Calendar } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Save, Send, Calendar } from 'lucide-react';
 import { determinePostExamRouting, generateRoutingNotification, estimateCheckoutDuration } from '@/lib/workflow/post-exam-router';
 import { VisitGroup } from '@/lib/scheduling/procedure-grouping';
 
@@ -69,10 +69,10 @@ export default function TreatmentPlanBuilder() {
       estimatedCost: procedure.cost,
       estimatedDuration: procedure.duration,
       priority: 'normal',
-      sequenceOrder: treatmentPlan.procedures.length + 1
+      sequenceOrder: (treatmentPlan.procedures?.length || 0) + 1
     };
 
-    const updatedProcedures = [...treatmentPlan.procedures, newProcedure];
+    const updatedProcedures = [...(treatmentPlan.procedures || []), newProcedure];
     const totalCost = updatedProcedures.reduce((sum, p) => sum + p.estimatedCost, 0);
     const estimatedInsurance = totalCost * 0.3; // Assume 30% insurance coverage
     const patientPortion = totalCost - estimatedInsurance;
@@ -90,7 +90,7 @@ export default function TreatmentPlanBuilder() {
   };
 
   const removeProcedure = (id: string) => {
-    const updatedProcedures = treatmentPlan.procedures.filter(p => p.id !== id);
+    const updatedProcedures = (treatmentPlan.procedures || []).filter(p => p.id !== id);
     const totalCost = updatedProcedures.reduce((sum, p) => sum + p.estimatedCost, 0);
     const estimatedInsurance = totalCost * 0.3;
     const patientPortion = totalCost - estimatedInsurance;
@@ -105,7 +105,7 @@ export default function TreatmentPlanBuilder() {
   };
 
   const updateProcedure = (id: string, field: keyof TreatmentProcedure, value: any) => {
-    const updatedProcedures = treatmentPlan.procedures.map(p => 
+    const updatedProcedures = (treatmentPlan.procedures || []).map(p => 
       p.id === id ? { ...p, [field]: value } : p
     );
 
@@ -211,9 +211,7 @@ export default function TreatmentPlanBuilder() {
         {/* Show either Treatment Plan Builder or Scheduler */}
         {showScheduler ? (
           <TreatmentPlanScheduler
-            treatmentPlanId={treatmentPlan.id || ''}
             procedures={treatmentPlan.procedures || []}
-            patientId={patientId || ''}
             onComplete={handleSchedulingComplete}
           />
         ) : (
@@ -279,16 +277,16 @@ export default function TreatmentPlanBuilder() {
             {/* Procedures List */}
             <Card className="p-6">
               <h2 className="text-lg font-semibold mb-4">
-                Planned Procedures ({treatmentPlan.procedures.length})
+                Planned Procedures ({treatmentPlan.procedures?.length || 0})
               </h2>
               
-              {treatmentPlan.procedures.length === 0 ? (
+              {(treatmentPlan.procedures?.length || 0) === 0 ? (
                 <p className="text-gray-500 text-center py-8">
                   No procedures added yet. Add procedures above to build the treatment plan.
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {treatmentPlan.procedures.map((proc, index) => (
+                  {(treatmentPlan.procedures || []).map((proc, index) => (
                     <div key={proc.id} className="border rounded-lg p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -368,12 +366,12 @@ export default function TreatmentPlanBuilder() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Procedures:</span>
-                      <span className="font-medium">{treatmentPlan.procedures.length}</span>
+                      <span className="font-medium">{treatmentPlan.procedures?.length || 0}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Est. Duration:</span>
                       <span className="font-medium">
-                        {treatmentPlan.procedures.reduce((sum, p) => sum + p.estimatedDuration, 0)} min
+                        {(treatmentPlan.procedures || []).reduce((sum, p) => sum + p.estimatedDuration, 0)} min
                       </span>
                     </div>
                   </div>
@@ -383,15 +381,15 @@ export default function TreatmentPlanBuilder() {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Subtotal:</span>
-                      <span className="font-medium">{formatCurrency(treatmentPlan.totalCost)}</span>
+                      <span className="font-medium">{formatCurrency(treatmentPlan.totalCost || 0)}</span>
                     </div>
                     <div className="flex justify-between text-green-600">
                       <span>Insurance (est.):</span>
-                      <span>-{formatCurrency(treatmentPlan.estimatedInsurance)}</span>
+                      <span>-{formatCurrency(treatmentPlan.estimatedInsurance || 0)}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold border-t pt-3">
                       <span>Patient Portion:</span>
-                      <span>{formatCurrency(treatmentPlan.patientPortion)}</span>
+                      <span>{formatCurrency(treatmentPlan.patientPortion || 0)}</span>
                     </div>
                   </div>
                 </div>

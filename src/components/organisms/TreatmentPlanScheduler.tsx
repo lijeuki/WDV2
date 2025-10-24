@@ -9,11 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { 
-  Calendar, 
   CheckCircle2, 
   Clock, 
   AlertCircle, 
-  ArrowRight,
   Edit,
   Save
 } from 'lucide-react';
@@ -26,16 +24,12 @@ import {
 import { TreatmentProcedure } from '@/lib/types/dental';
 
 interface TreatmentPlanSchedulerProps {
-  treatmentPlanId: string;
   procedures: TreatmentProcedure[];
-  patientId: string;
   onComplete?: (visitGroups: VisitGroup[]) => void;
 }
 
 export function TreatmentPlanScheduler({
-  treatmentPlanId,
   procedures,
-  patientId,
   onComplete,
 }: TreatmentPlanSchedulerProps) {
   const [visitGroups, setVisitGroups] = useState<VisitGroup[]>([]);
@@ -121,7 +115,7 @@ export function TreatmentPlanScheduler({
 
       {/* Visit Groups */}
       <div className="space-y-4">
-        {visitGroups.map((visit, index) => {
+        {visitGroups.map((visit) => {
           const schedulability = isVisitSchedulable(visit, visitGroups);
           const isScheduled = !!visit.appointmentId;
           const isEditing = editingVisitId === visit.id;
@@ -311,7 +305,6 @@ interface SchedulingFormProps {
 }
 
 function SchedulingForm({
-  visitId,
   suggestedDate,
   duration,
   onSchedule,

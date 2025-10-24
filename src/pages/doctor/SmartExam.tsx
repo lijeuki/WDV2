@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import Odontogram from '@/components/organisms/Odontogram';
 import { ExamData, OdontogramData, ToothNumber } from '@/lib/types/dental';
-import { ArrowLeft, Save, CheckCircle2, AlertCircle, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function SmartExam() {
   const navigate = useNavigate();

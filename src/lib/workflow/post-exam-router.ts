@@ -89,7 +89,7 @@ export function analyzeTreatmentPlan(
  * Determine optimal routing after exam completion
  */
 export function determinePostExamRouting(
-  examData: ExamData,
+  _examData: ExamData,
   treatmentPlan?: TreatmentPlan,
   patientId?: string
 ): PostExamRouting {

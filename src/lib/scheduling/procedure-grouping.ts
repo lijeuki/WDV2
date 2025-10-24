@@ -35,23 +35,15 @@ const DEFAULT_CONSTRAINTS: GroupingConstraints = {
 
 /**
  * Clinical sequencing rules - procedures that must be done in specific order
+ * Note: Used for reference, actual logic implemented in requiresSequencing()
  */
-const SEQUENCING_RULES = {
-  // Must be done BEFORE crowns
-  beforeCrown: ['root-canal', 'core-buildup'],
-  
-  // Must be done BEFORE implants
-  beforeImplant: ['extraction', 'bone-graft'],
-  
-  // Must be done BEFORE bridges
-  beforeBridge: ['root-canal', 'core-buildup'],
-  
-  // Should be done BEFORE restorative work
-  beforeRestorative: ['cleaning', 'scaling-root-planing', 'periodontal-treatment'],
-  
-  // Emergency procedures (do first)
-  emergency: ['extraction-emergency', 'abscess-drainage', 'emergency-endo'],
-};
+// const SEQUENCING_RULES = {
+//   beforeCrown: ['root-canal', 'core-buildup'],
+//   beforeImplant: ['extraction', 'bone-graft'],
+//   beforeBridge: ['root-canal', 'core-buildup'],
+//   beforeRestorative: ['cleaning', 'scaling-root-planing', 'periodontal-treatment'],
+//   emergency: ['extraction-emergency', 'abscess-drainage', 'emergency-endo'],
+// };
 
 /**
  * Procedure codes mapped to categories
@@ -128,10 +120,11 @@ function getQuadrant(toothNumber: number): number {
 
 /**
  * Check if teeth are adjacent
+ * Note: Available for future use in enhanced grouping logic
  */
-function areAdjacent(tooth1: number, tooth2: number): boolean {
-  return Math.abs(tooth1 - tooth2) === 1;
-}
+// function areAdjacent(tooth1: number, tooth2: number): boolean {
+//   return Math.abs(tooth1 - tooth2) === 1;
+// }
 
 /**
  * Group procedures into logical visits

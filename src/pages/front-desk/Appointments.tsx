@@ -6,7 +6,6 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
   Calendar,
@@ -103,7 +102,6 @@ const mockAppointments: Appointment[] = [
 export default function Appointments() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'day' | 'week' | 'month'>('day');
-  const [showNewAppointment, setShowNewAppointment] = useState(false);
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
@@ -170,7 +168,7 @@ export default function Appointments() {
             <h1 className="text-2xl font-bold">Appointments</h1>
             <p className="text-gray-600">Manage patient appointments and schedule</p>
           </div>
-          <Button onClick={() => setShowNewAppointment(true)}>
+          <Button onClick={() => alert('New appointment form coming soon!')}>
             <Plus className="size-4 mr-2" />
             New Appointment
           </Button>
@@ -236,7 +234,7 @@ export default function Appointments() {
                 <Calendar className="size-16 mx-auto mb-4 text-gray-300" />
                 <h3 className="text-lg font-semibold text-gray-600 mb-2">No appointments scheduled</h3>
                 <p className="text-gray-500 mb-4">There are no appointments for this date.</p>
-                <Button onClick={() => setShowNewAppointment(true)}>
+                <Button onClick={() => alert('New appointment form coming soon!')}>
                   <Plus className="size-4 mr-2" />
                   Schedule Appointment
                 </Button>
