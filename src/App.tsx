@@ -13,6 +13,10 @@ import CheckIn from './pages/front-desk/CheckIn';
 import Appointments from './pages/front-desk/Appointments';
 import Payments from './pages/front-desk/Payments';
 import ClinicDashboard from './pages/clinic/ClinicDashboard';
+import StaffManagement from './pages/clinic/StaffManagement';
+import InventoryManagement from './pages/clinic/InventoryManagement';
+import BranchDashboard from './pages/branch/BranchDashboard';
+import WalkingDoctorDashboard from './pages/walking-doctor/WalkingDoctorDashboard';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -53,6 +57,18 @@ function App() {
           {/* Clinic Owner Routes */}
           <Route path="/clinic">
             <Route path="dashboard" element={<ClinicDashboard />} />
+            <Route path="staff" element={<StaffManagement />} />
+            <Route path="inventory" element={<InventoryManagement />} />
+          </Route>
+          
+          {/* Branch Owner Routes */}
+          <Route path="/branch">
+            <Route path="dashboard" element={<BranchDashboard />} />
+          </Route>
+          
+          {/* Walking Doctor Routes */}
+          <Route path="/walking-doctor">
+            <Route path="dashboard" element={<WalkingDoctorDashboard />} />
           </Route>
           
           {/* Checkout Routes (accessible by both roles) */}
