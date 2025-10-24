@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../../components/layouts/DashboardLayout';
+import { WaitingPatientsQueue } from '../../components/organisms/WaitingPatientsQueue';
 
 export function DoctorDashboard() {
   const navigate = useNavigate();
@@ -115,6 +116,11 @@ export function DoctorDashboard() {
           </div>
         </div>
         
+        {/* Waiting Patients Queue - Connected from Front Desk */}
+        <div className="mt-6">
+          <WaitingPatientsQueue doctorId="DR001" doctorName="Dr. Smith" />
+        </div>
+
         {/* System Status */}
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-start space-x-3">
@@ -122,10 +128,9 @@ export function DoctorDashboard() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div className="flex-1">
-              <h4 className="text-sm font-medium text-blue-900 mb-1">🚀 System Ready!</h4>
+              <h4 className="text-sm font-medium text-blue-900 mb-1">🔗 Connected to Front Desk</h4>
               <p className="text-sm text-blue-700">
-                The WD Dental EHR system is up and running. All features are ready for use.
-                Click "View Patients" to start managing patient records.
+                Patients checked in by Front Desk will automatically appear in the Waiting Queue above.
               </p>
             </div>
           </div>
