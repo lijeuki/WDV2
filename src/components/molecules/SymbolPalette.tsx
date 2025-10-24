@@ -2,8 +2,10 @@ import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ScrollArea } from "../ui/scroll-area";
+import { Input } from "../ui/input";
 import { DentalSymbol, DENTAL_SYMBOLS, SymbolCategory } from "../../lib/odontogram-types";
-import { Info } from "lucide-react";
+import { Info, Search } from "lucide-react";
+import { useState } from "react";
 
 interface SymbolPaletteProps {
   onSymbolSelect: (symbol: DentalSymbol) => void;
@@ -16,18 +18,40 @@ export function SymbolPalette({
   selectedSymbolId,
   compact = false 
 }: SymbolPaletteProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const categories: { id: SymbolCategory; label: string; icon?: string }[] = [
     { id: 'findings', label: 'Findings', icon: '🔍' },
-    { id: 'restorations', label: 'Restorations', icon: '🦷' },
-    { id: 'prosthetics', label: 'Prosthetics', icon: '👑' },
-    { id: 'endodontic', label: 'Endodontic', icon: '🩺' },
+    { id: 'restorations', label: 'Restore', icon: '🦷' },
+    { id: 'prosthetics', label: 'Prosth.', icon: '👑' },
+    { id: 'endodontic', label: 'Endo', icon: '🩺' },
     { id: 'missing', label: 'Missing', icon: '❌' },
-    { id: 'orthodontic', label: 'Orthodontic', icon: '🔗' },
-    { id: 'periodontal', label: 'Periodontal', icon: '⚕️' },
+    { id: 'orthodontic', label: 'Ortho', icon: '🔗' },
+    { id: 'periodontal', label: 'Perio', icon: '⚕️' },
   ];
 
   const symbolsByCategory = (category: SymbolCategory) => {
-    return Object.values(DENTAL_SYMBOLS).filter(s => s.category === category);
+    const symbols = Object.values(DENTAL_SYMBOLS).filter(s => s.category === category);
+    
+    if (!searchQuery) return symbols;
+    
+    const query = searchQuery.toLowerCase();
+    return symbols.filter(s => 
+      s.nameId.toLowerCase().includes(query) ||
+      s.name.toLowerCase().includes(query) ||
+      s.code.toLowerCase().includes(query)
+    );
+  };
+  
+  const allFilteredSymbols = () => {
+    if (!searchQuery) return [];
+    
+    const query = searchQuery.toLowerCase();
+    return Object.values(DENTAL_SYMBOLS).filter(s => 
+      s.nameId.toLowerCase().includes(query) ||
+      s.name.toLowerCase().includes(query) ||
+      s.code.toLowerCase().includes(query)
+    );
   };
 
   const SymbolButton = ({ symbol }: { symbol: DentalSymbol }) => {
@@ -101,6 +125,17 @@ export function SymbolPalette({
         )}
       </div>
 
+      {/* Search Bar */}
+      <div className="mb-3 relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <Input
+          placeholder="Search symbols..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-9 h-9 text-sm"
+        />
+      </div>
+
       {selectedSymbolId && (
         <div className="mb-3 p-2 bg-primary/10 rounded border border-primary/30">
           <div className="flex items-center gap-2">
@@ -112,32 +147,62 @@ export function SymbolPalette({
         </div>
       )}
 
-      <Tabs defaultValue="findings" className="w-full">
-        <TabsList className={`grid ${compact ? 'grid-cols-4' : 'grid-cols-3'} w-full mb-3`}>
-          {categories.slice(0, compact ? 4 : categories.length).map(cat => (
-            <TabsTrigger 
-              key={cat.id} 
-              value={cat.id}
-              className="text-xs"
-            >
-              {cat.icon && <span className="mr-1">{cat.icon}</span>}
-              {compact ? cat.icon : cat.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
+      {/* Show search results if searching, otherwise show tabs */}
+      {searchQuery ? (
         <ScrollArea className={compact ? 'h-[400px]' : 'h-[500px]'}>
-          {categories.map(category => (
-            <TabsContent key={category.id} value={category.id} className="mt-0">
-              <div className={`grid ${compact ? 'grid-cols-1 gap-1.5' : 'grid-cols-1 gap-2.5'}`}>
-                {symbolsByCategory(category.id).map(symbol => (
-                  <SymbolButton key={symbol.id} symbol={symbol} />
-                ))}
+          <div className={`grid ${compact ? 'grid-cols-1 gap-1.5' : 'grid-cols-1 gap-2.5'}`}>
+            {allFilteredSymbols().length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground text-sm">
+                No symbols found for "{searchQuery}"
               </div>
-            </TabsContent>
-          ))}
+            ) : (
+              allFilteredSymbols().map(symbol => (
+                <SymbolButton key={symbol.id} symbol={symbol} />
+              ))
+            )}
+          </div>
         </ScrollArea>
-      </Tabs>
+      ) : (
+        <Tabs defaultValue="findings" className="w-full">
+          <TabsList className="grid grid-cols-4 w-full mb-3 h-auto">
+            {categories.slice(0, 4).map(cat => (
+              <TabsTrigger 
+                key={cat.id} 
+                value={cat.id}
+                className="text-[10px] flex-col h-14 gap-1"
+              >
+                <span className="text-lg">{cat.icon}</span>
+                <span>{cat.label}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          
+          <TabsList className="grid grid-cols-3 w-full mb-3 h-auto">
+            {categories.slice(4).map(cat => (
+              <TabsTrigger 
+                key={cat.id} 
+                value={cat.id}
+                className="text-[10px] flex-col h-14 gap-1"
+              >
+                <span className="text-lg">{cat.icon}</span>
+                <span>{cat.label}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <ScrollArea className={compact ? 'h-[350px]' : 'h-[400px]'}>
+            {categories.map(category => (
+              <TabsContent key={category.id} value={category.id} className="mt-0">
+                <div className={`grid ${compact ? 'grid-cols-1 gap-1.5' : 'grid-cols-1 gap-2'}`}>
+                  {symbolsByCategory(category.id).map(symbol => (
+                    <SymbolButton key={symbol.id} symbol={symbol} />
+                  ))}
+                </div>
+              </TabsContent>
+            ))}
+          </ScrollArea>
+        </Tabs>
+      )}
     </Card>
   );
 }

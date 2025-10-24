@@ -241,14 +241,15 @@ function InteractiveTooth({
               <title>Lingual/Palatal</title>
             </polygon>
             
-            {/* Center Rectangle - Buccal/Labial */}
+            {/* Center Rectangle - Buccal/Labial with border */}
             <rect
               x="16"
               y="16"
               width="13"
               height="13"
               fill={getSurfaceColor('buccal')}
-              stroke="none"
+              stroke="#1f2937"
+              strokeWidth="1"
               className="cursor-pointer transition-all hover:opacity-80"
               style={{ 
                 pointerEvents: 'all',
