@@ -1,9 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../../components/layouts/DashboardLayout';
 
 export function FrontDeskDashboard() {
-  const navigate = useNavigate();
-  
   return (
     <DashboardLayout role="front-desk">
       <div className="p-8">

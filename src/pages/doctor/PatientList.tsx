@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../../components/layouts/DashboardLayout';
 
 // Mock patient data
@@ -12,7 +11,6 @@ const mockPatients = [
 ];
 
 export function PatientList() {
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   
   const filteredPatients = mockPatients.filter(patient =>

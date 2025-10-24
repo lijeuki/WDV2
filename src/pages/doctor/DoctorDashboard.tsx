@@ -129,6 +129,7 @@ export function DoctorDashboard() {
               </p>
             </div>
           </div>
+        </div>
       </div>
     </DashboardLayout>
   );

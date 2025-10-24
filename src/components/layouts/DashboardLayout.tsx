@@ -50,7 +50,6 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
   };
 
   const navItems = navigationItems[role] || [];
-  const roleColors = getRoleColors();
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -86,6 +85,8 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
     };
     return colors[role] || colors.doctor;
   };
+
+  const roleColors = getRoleColors();
 
   const getRoleLabel = () => {
     const labels = {
