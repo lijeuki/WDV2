@@ -34,22 +34,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { user: signedInUser } = await authSignIn(email, password);
-    setUser(signedInUser);
-    
-    // Redirect based on role
-    if (signedInUser.role === 'doctor') {
-      navigate('/doctor');
-    } else if (signedInUser.role === 'front_desk') {
-      navigate('/front-desk');
-    } else if (signedInUser.role === 'clinic_owner') {
-      navigate('/clinic/dashboard');
-    } else if (signedInUser.role === 'branch_owner') {
-      navigate('/branch/dashboard');
-    } else if (signedInUser.role === 'walking_doctor') {
-      navigate('/walking-doctor/dashboard');
-    } else {
-      navigate('/doctor'); // Default
+    try {
+      console.log('📝 AuthContext: Calling authSignIn...');
+      const { user: signedInUser } = await authSignIn(email, password);
+      console.log('✅ AuthContext: Got user:', signedInUser.email, 'Role:', signedInUser.role);
+      setUser(signedInUser);
+      
+      // Redirect based on role
+      if (signedInUser.role === 'doctor') {
+        console.log('🏥 Navigating to /doctor');
+        navigate('/doctor');
+      } else if (signedInUser.role === 'front_desk') {
+        console.log('💼 Navigating to /front-desk');
+        navigate('/front-desk');
+      } else if (signedInUser.role === 'clinic_owner') {
+        console.log('🏪 Navigating to /clinic/dashboard');
+        navigate('/clinic/dashboard');
+      } else if (signedInUser.role === 'branch_owner') {
+        console.log('🏢 Navigating to /branch/dashboard');
+        navigate('/branch/dashboard');
+      } else if (signedInUser.role === 'walking_doctor') {
+        console.log('🏥 Navigating to /walking-doctor/dashboard');
+        navigate('/walking-doctor/dashboard');
+      } else {
+        console.log('🔄 Unknown role, navigating to /doctor (default)');
+        navigate('/doctor'); // Default
+      }
+    } catch (error) {
+      console.error('❌ AuthContext signIn error:', error);
+      throw error; // Re-throw so Login component can catch it
     }
   };
 

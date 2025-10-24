@@ -12,12 +12,19 @@ export interface User {
 
 // Sign in with email and password
 export async function signIn(email: string, password: string) {
+  console.log('🔑 auth.ts: Signing in with email:', email);
+  
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) throw error;
+  if (error) {
+    console.error('❌ auth.ts: Supabase auth error:', error);
+    throw error;
+  }
+
+  console.log('✅ auth.ts: Auth successful, fetching user profile...');
 
   // Get user profile from users table
   const { data: profile, error: profileError } = await supabase
@@ -26,12 +33,18 @@ export async function signIn(email: string, password: string) {
     .eq('auth_id', data.user.id)
     .maybeSingle();
 
-  if (profileError) throw profileError;
+  if (profileError) {
+    console.error('❌ auth.ts: Profile fetch error:', profileError);
+    throw profileError;
+  }
   
   // If no profile exists, throw error
   if (!profile) {
-    throw new Error('User profile not found. Please contact administrator.');
+    console.error('❌ auth.ts: No profile found for auth_id:', data.user.id);
+    throw new Error('User profile not found. Please link your account in the database. See AUTHENTICATION_SETUP.md');
   }
+
+  console.log('✅ auth.ts: Profile found:', profile.email, 'Role:', profile.role);
 
   return {
     session: data.session,

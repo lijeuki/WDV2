@@ -20,7 +20,10 @@ export function Login() {
     try {
       if (supabaseConfigured) {
         // Real authentication
+        console.log('🔐 Attempting login with Supabase...');
         await signIn(email, password);
+        console.log('✅ Login successful');
+        // Note: navigation happens in AuthContext after successful login
       } else {
         // Demo mode fallback
         console.warn('🔶 Demo mode: Supabase not configured');
@@ -31,11 +34,11 @@ export function Login() {
         } else {
           navigate('/doctor');
         }
+        setLoading(false);
       }
     } catch (err: any) {
-      console.error('Login failed:', err);
+      console.error('❌ Login failed:', err);
       setError(err.message || 'Login failed. Please check your credentials.');
-    } finally {
       setLoading(false);
     }
   };
