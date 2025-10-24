@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, getCurrentUser, onAuthStateChange, signIn as authSignIn, signOut as authSignOut } from './auth';
+import { User } from './auth';
+import { signInWithDatabase, getCurrentDatabaseUser, signOutFromDatabase } from './db-auth';
 import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
@@ -17,26 +18,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check current session
-    getCurrentUser().then((currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const { data } = onAuthStateChange((user) => {
-      setUser(user);
-    });
-
-    return () => {
-      data?.subscription.unsubscribe();
-    };
+    // Check current session from database auth
+    const currentUser = getCurrentDatabaseUser();
+    setUser(currentUser);
+    setLoading(false);
   }, []);
 
   const signIn = async (email: string, password: string) => {
     try {
-      console.log('📝 AuthContext: Calling authSignIn...');
-      const { user: signedInUser } = await authSignIn(email, password);
+      console.log('📝 AuthContext: Calling database signIn...');
+      const { user: signedInUser } = await signInWithDatabase(email, password);
       console.log('✅ AuthContext: Got user:', signedInUser.email, 'Role:', signedInUser.role);
       setUser(signedInUser);
       
@@ -67,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
-    await authSignOut();
+    signOutFromDatabase();
     setUser(null);
     navigate('/login');
   };

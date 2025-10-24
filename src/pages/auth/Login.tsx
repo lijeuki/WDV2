@@ -119,25 +119,44 @@ export function Login() {
         </form>
         
         {/* Demo Credentials */}
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <div className="text-xs font-semibold text-gray-700 mb-2">
-            {supabaseConfigured ? 'Demo Accounts (Setup Required):' : 'Demo Accounts:'}
+        <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-teal-50 rounded-lg border border-blue-200">
+          <div className="text-xs font-semibold text-blue-900 mb-3 flex items-center gap-2">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+            Database Login - Demo Accounts
           </div>
-          <div className="text-xs text-gray-600 space-y-1">
-            <div>👨‍⚕️ Doctor: <span className="font-mono">doctor@clinic.com</span></div>
-            <div>💼 Front Desk: <span className="font-mono">desk@clinic.com</span></div>
-            {supabaseConfigured && (
-              <>
-                <div className="text-gray-400 text-xs mt-2 pt-2 border-t border-gray-200">
-                  More roles available (see AUTHENTICATION_SETUP.md):
-                </div>
-                <div className="text-gray-400">🏥 Walking Doctor, Branch Owner, Clinic Owner</div>
-              </>
-            )}
-            <div className="text-gray-500 mt-2">
-              {supabaseConfigured 
-                ? 'See AUTHENTICATION_SETUP.md for setup instructions' 
-                : 'Password: any (demo mode)'}
+          <div className="text-xs text-gray-700 space-y-2 bg-white p-3 rounded border border-blue-100">
+            <div className="font-semibold text-blue-800 mb-2">All users - Password: <span className="font-mono bg-blue-100 px-2 py-1 rounded">password</span></div>
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-blue-600">👨‍⚕️</span>
+                <span className="font-medium">Doctor:</span> 
+                <span className="font-mono text-blue-700">doctor@clinic.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-teal-600">💼</span>
+                <span className="font-medium">Front Desk:</span> 
+                <span className="font-mono text-teal-700">desk@clinic.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-purple-600">🏥</span>
+                <span className="font-medium">Clinic Owner:</span> 
+                <span className="font-mono text-purple-700">clinic@owner.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-orange-600">🏢</span>
+                <span className="font-medium">Branch Owner:</span> 
+                <span className="font-mono text-orange-700">branch@owner.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-green-600">🦷</span>
+                <span className="font-medium">Walking Doctor:</span> 
+                <span className="font-mono text-green-700">walkingdoctor@admin.com</span>
+              </div>
+            </div>
+            <div className="text-gray-600 mt-3 pt-2 border-t border-blue-100 text-xs">
+              💡 <strong>Note:</strong> No Supabase Auth setup needed! Login goes directly to the database.
             </div>
           </div>
         </div>
