@@ -12,6 +12,7 @@ import PostExamCheckout from './pages/front-desk/PostExamCheckout';
 import CheckIn from './pages/front-desk/CheckIn';
 import Appointments from './pages/front-desk/Appointments';
 import Payments from './pages/front-desk/Payments';
+import ClinicDashboard from './pages/clinic/ClinicDashboard';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -47,6 +48,11 @@ function App() {
             <Route path="check-in" element={<CheckIn />} />
             <Route path="appointments" element={<Appointments />} />
             <Route path="payments" element={<Payments />} />
+          </Route>
+          
+          {/* Clinic Owner Routes */}
+          <Route path="/clinic">
+            <Route path="dashboard" element={<ClinicDashboard />} />
           </Route>
           
           {/* Checkout Routes (accessible by both roles) */}
