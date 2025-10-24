@@ -101,7 +101,7 @@ export function PatientList() {
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
-                    alert(`Patient profile for ${patient.name} - Coming soon!`);
+                    navigate(`/doctor/patients/${patient.id}`);
                   }}
                   className="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >

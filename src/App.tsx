@@ -4,6 +4,8 @@ import { AuthProvider } from './lib/auth/AuthContext';
 import { Login } from './pages/auth/Login';
 import { DoctorDashboard } from './pages/doctor/DoctorDashboard';
 import { PatientList } from './pages/doctor/PatientList';
+import { PatientDetail } from './pages/doctor/PatientDetail';
+import { Appointments as DoctorAppointments } from './pages/doctor/Appointments';
 import SmartExam from './pages/doctor/SmartExam';
 import TreatmentPlanBuilder from './pages/doctor/TreatmentPlanBuilder';
 import NewPatient from './pages/doctor/NewPatient';
@@ -42,6 +44,8 @@ function App() {
             <Route index element={<DoctorDashboard />} />
             <Route path="patients" element={<PatientList />} />
             <Route path="patients/new" element={<NewPatient />} />
+            <Route path="patients/:patientId" element={<PatientDetail />} />
+            <Route path="appointments" element={<DoctorAppointments />} />
             <Route path="exam/:patientId" element={<SmartExam />} />
             <Route path="treatment-plan/new/:patientId" element={<TreatmentPlanBuilder />} />
           </Route>
