@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { InteractiveOdontogram } from '@/components/organisms/InteractiveOdontogram';
 import { SymbolPalette } from '@/components/molecules/SymbolPalette';
 import SOAPNotesForm from '@/components/organisms/SOAPNotesForm';
-import { ExamData, OdontogramData, ToothNumber, SOAPNotes } from '@/lib/types/dental';
+import { ExamData, ToothNumber, SOAPNotes } from '@/lib/types/dental';
 import { DentalSymbol, ToothData } from '@/lib/odontogram-types';
 import { ArrowLeft, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -233,7 +233,7 @@ export default function SmartExam() {
                 {/* Symbol Palette - takes 1 column on the right */}
                 <div className="lg:col-span-1">
                   <SymbolPalette
-                    selectedSymbol={selectedSymbol}
+                    selectedSymbolId={selectedSymbol?.id}
                     onSymbolSelect={setSelectedSymbol}
                     compact={false}
                   />
@@ -347,10 +347,10 @@ export default function SmartExam() {
               {/* Odontogram Preview */}
               <div>
                 <h3 className="font-semibold mb-3">Odontogram</h3>
-                <Odontogram
-                  data={examData.odontogramData!}
+                <InteractiveOdontogram
+                  patientId={patientId}
+                  initialData={(examData.odontogramData || {}) as Record<string, ToothData>}
                   readOnly
-                  highlightedTeeth={getTeethRequiringTreatment()}
                 />
               </div>
 

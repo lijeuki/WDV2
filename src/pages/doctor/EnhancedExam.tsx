@@ -80,7 +80,6 @@ export function EnhancedExam() {
   
   // Treatment decision workflow
   const [showTreatmentDecision, setShowTreatmentDecision] = useState(false);
-  const [treatmentDecision, setTreatmentDecision] = useState<TreatmentDecision | null>(null);
 
   const handleSendToFrontDesk = () => {
     const examData = {
@@ -143,7 +142,6 @@ export function EnhancedExam() {
       id: `PROC-${Date.now()}`,
       toothNumber: recommendation.toothNumber,
       procedureName: recommendation.recommendedProcedure,
-      procedureCode: recommendation.procedureCode,
       estimatedCost: recommendation.estimatedCost,
       duration: `${recommendation.estimatedDuration} min`,
       prescriptions: [],
@@ -159,12 +157,21 @@ export function EnhancedExam() {
   };
 
   const handleTreatmentDecision = (decision: TreatmentDecision) => {
-    setTreatmentDecision(decision);
     setShowTreatmentDecision(false);
     
     if (decision === 'immediate') {
-      alert('Immediate treatment workflow starting...\n\nNext steps:\n1. Treatment Authorization\n2. Anesthesia Documentation\n3. Procedural Execution\n4. Post-Treatment Documentation');
-      // TODO: Navigate to treatment execution workflow
+      // Navigate to immediate treatment execution with procedures
+      navigate(`/doctor/treatment-execution/${patientId}`, {
+        state: {
+          patientId,
+          procedures,
+          examData: {
+            chiefComplaint,
+            odontogramData,
+            clinicalNotes
+          }
+        }
+      });
     } else if (decision === 'schedule') {
       setCurrentStep('present');
     } else if (decision === 'defer') {
@@ -672,9 +679,17 @@ export function EnhancedExam() {
       {/* Treatment Decision Dialog */}
       <TreatmentDecisionDialog
         open={showTreatmentDecision}
-        onOpenChange={setShowTreatmentDecision}
+        onClose={() => setShowTreatmentDecision(false)}
         onDecision={handleTreatmentDecision}
-        treatmentPlan={procedures}
+        treatmentPlanSummary={{
+          procedureCount: procedures.length,
+          estimatedCost: procedures.reduce((sum, p) => sum + p.estimatedCost, 0),
+          estimatedDuration: procedures.reduce((sum, p) => {
+            const mins = parseInt(p.duration) || 0;
+            return sum + mins;
+          }, 0),
+          urgentItems: treatmentRecommendations.filter(r => r.priority === 'urgent').length
+        }}
       />
     </div>
   );

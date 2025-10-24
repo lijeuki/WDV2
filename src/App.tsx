@@ -7,8 +7,11 @@ import { PatientList } from './pages/doctor/PatientList';
 import { PatientDetail } from './pages/doctor/PatientDetail';
 import { Appointments as DoctorAppointments } from './pages/doctor/Appointments';
 import { EnhancedExam } from './pages/doctor/EnhancedExam';
+import { TreatmentExecution } from './pages/doctor/TreatmentExecution';
 import TreatmentPlanBuilder from './pages/doctor/TreatmentPlanBuilder';
 import NewPatient from './pages/doctor/NewPatient';
+import Procedures from './pages/doctor/Procedures';
+import Reports from './pages/doctor/Reports';
 import { FrontDeskDashboard } from './pages/front-desk/FrontDeskDashboard';
 import PostExamCheckout from './pages/front-desk/PostExamCheckout';
 import CheckIn from './pages/front-desk/CheckIn';
@@ -48,7 +51,10 @@ function App() {
             <Route path="patients/:patientId" element={<PatientDetail />} />
             <Route path="appointments" element={<DoctorAppointments />} />
             <Route path="exam/:patientId" element={<EnhancedExam />} />
+            <Route path="treatment-execution/:patientId" element={<TreatmentExecution />} />
             <Route path="treatment-plan/new/:patientId" element={<TreatmentPlanBuilder />} />
+            <Route path="procedures" element={<Procedures />} />
+            <Route path="reports" element={<Reports />} />
           </Route>
           
           {/* Front Desk Routes */}

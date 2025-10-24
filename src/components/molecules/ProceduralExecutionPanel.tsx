@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
 import { Alert, AlertDescription } from '../ui/alert';
-import { Play, Pause, StopCircle, Clock, AlertTriangle, CheckCircle2, Package } from 'lucide-react';
+import { Play, Pause, Clock, AlertTriangle, CheckCircle2, Package } from 'lucide-react';
 import { ProceduralNotes } from '@/lib/types/treatment-workflow';
 
 interface ProceduralExecutionPanelProps {

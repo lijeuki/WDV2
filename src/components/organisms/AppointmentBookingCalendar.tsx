@@ -23,13 +23,11 @@ interface Doctor {
 interface AppointmentBookingCalendarProps {
   doctors: Doctor[];
   onBookAppointment?: (doctorId: string, date: Date, time: string) => void;
-  patientId?: string;
 }
 
 export function AppointmentBookingCalendar({
   doctors,
-  onBookAppointment,
-  patientId
+  onBookAppointment
 }: AppointmentBookingCalendarProps) {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [date, setDate] = useState<Date | undefined>(new Date());

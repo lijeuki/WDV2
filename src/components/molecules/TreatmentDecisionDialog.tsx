@@ -1,7 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
-import { Badge } from '../ui/badge';
 import { Calendar, Clock, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { TreatmentDecision } from '@/lib/types/treatment-workflow';
 

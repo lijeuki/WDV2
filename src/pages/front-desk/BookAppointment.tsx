@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppointmentBookingCalendar } from '@/components/organisms/AppointmentBookingCalendar';
 import { ArrowLeft } from 'lucide-react';
@@ -63,10 +62,8 @@ const mockDoctors = [
 
 export function BookAppointment() {
   const navigate = useNavigate();
-  const [isBooking, setIsBooking] = useState(false);
 
   const handleBookAppointment = async (doctorId: string, date: Date, time: string) => {
-    setIsBooking(true);
 
     // Simulate API call
     try {
@@ -104,8 +101,6 @@ export function BookAppointment() {
     } catch (error) {
       console.error('Error booking appointment:', error);
       alert('Failed to book appointment. Please try again.');
-    } finally {
-      setIsBooking(false);
     }
   };
 

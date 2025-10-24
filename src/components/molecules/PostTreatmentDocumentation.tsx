@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Checkbox } from '../ui/checkbox';
-import { CheckCircle2, FileText } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import { PostTreatmentDocumentation as PostTreatmentData } from '@/lib/types/treatment-workflow';
 
 interface PostTreatmentDocumentationProps {

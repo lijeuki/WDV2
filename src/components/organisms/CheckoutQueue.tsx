@@ -11,7 +11,8 @@ interface CheckoutQueueProps {
   frontDeskName?: string;
 }
 
-export function CheckoutQueue({ frontDeskId = 'FD001', frontDeskName = 'Front Desk' }: CheckoutQueueProps) {
+export function CheckoutQueue({}: CheckoutQueueProps) {
+  // frontDeskId and frontDeskName parameters available but unused
   const navigate = useNavigate();
   const [checkoutQueue, setCheckoutQueue] = useState<CheckoutPatient[]>([]);
 
