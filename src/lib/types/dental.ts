@@ -167,3 +167,121 @@ export interface TreatmentPlan {
   createdAt: string;
   updatedAt?: string;
 }
+
+// =====================================================
+// SOAP Notes Types
+// =====================================================
+
+export interface SOAPNotesSubjective {
+  chiefComplaint: string;
+  historyOfPresentIllness: string;
+  painLevel?: number; // 1-10 scale
+  painLocation?: string;
+  painDuration?: string;
+  previousTreatments?: string;
+  allergies?: string;
+  medications?: string;
+  medicalHistory?: string;
+}
+
+export interface SOAPNotesObjective {
+  vitalSigns: {
+    bloodPressure?: string;
+    pulse?: number;
+    temperature?: number;
+    respiratoryRate?: number;
+  };
+  extraoralExamination: string;
+  intraoralExamination: string;
+  periodontalAssessment?: string;
+  odontogramData: OdontogramData;
+  radiographicFindings?: string;
+  diagnosticTests?: string;
+}
+
+export interface SOAPNotesAssessment {
+  primaryDiagnosis: string;
+  secondaryDiagnoses?: string[];
+  icd10Codes?: string[];
+  prognosis: 'excellent' | 'good' | 'fair' | 'poor' | 'guarded';
+  differentialDiagnoses?: string[];
+  clinicalImpression: string;
+}
+
+export interface SOAPNotesPlan {
+  immediateTreatment?: string;
+  proposedTreatmentPlan: string;
+  procedures: TreatmentProcedure[];
+  prescriptions?: Array<{
+    medication: string;
+    dosage: string;
+    frequency: string;
+    duration: string;
+    instructions: string;
+  }>;
+  patientInstructions: string;
+  followUpSchedule?: string;
+  referrals?: string[];
+  preventiveMeasures?: string[];
+}
+
+export interface SOAPNotes {
+  id: string;
+  examId: string;
+  patientId: string;
+  doctorId: string;
+  visitDate: string;
+  subjective: SOAPNotesSubjective;
+  objective: SOAPNotesObjective;
+  assessment: SOAPNotesAssessment;
+  plan: SOAPNotesPlan;
+  status: 'draft' | 'completed' | 'signed';
+  createdAt: string;
+  updatedAt?: string;
+  signedAt?: string;
+  signature?: string;
+}
+
+export interface SOAPTemplate {
+  id: string;
+  name: string;
+  category: 'routine-exam' | 'emergency' | 'follow-up' | 'surgical' | 'custom';
+  description?: string;
+  subjectiveTemplate?: Partial<SOAPNotesSubjective>;
+  objectiveTemplate?: Partial<SOAPNotesObjective>;
+  assessmentTemplate?: Partial<SOAPNotesAssessment>;
+  planTemplate?: Partial<SOAPNotesPlan>;
+}
+
+// Common SOAP Templates
+export const DEFAULT_SOAP_TEMPLATES: SOAPTemplate[] = [
+  {
+    id: 'routine-exam',
+    name: 'Routine Dental Examination',
+    category: 'routine-exam',
+    subjectiveTemplate: {
+      chiefComplaint: 'Routine dental check-up',
+    },
+    objectiveTemplate: {
+      extraoralExamination: 'No significant findings. Face symmetrical, TMJ normal.',
+      intraoralExamination: 'Oral mucosa intact, tongue and floor of mouth normal.',
+    },
+  },
+  {
+    id: 'emergency-pain',
+    name: 'Emergency - Dental Pain',
+    category: 'emergency',
+    subjectiveTemplate: {
+      chiefComplaint: 'Severe tooth pain',
+      painLevel: 8,
+    },
+  },
+  {
+    id: 'follow-up',
+    name: 'Follow-up Visit',
+    category: 'follow-up',
+    subjectiveTemplate: {
+      chiefComplaint: 'Follow-up examination',
+    },
+  },
+];

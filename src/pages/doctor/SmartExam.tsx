@@ -4,16 +4,16 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import Odontogram from '@/components/organisms/Odontogram';
-import { ExamData, OdontogramData, ToothNumber } from '@/lib/types/dental';
+import SOAPNotesForm from '@/components/organisms/SOAPNotesForm';
+import { ExamData, OdontogramData, ToothNumber, SOAPNotes } from '@/lib/types/dental';
 import { ArrowLeft, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function SmartExam() {
   const navigate = useNavigate();
   const { patientId } = useParams();
 
-  const [examStep, setExamStep] = useState<'vitals' | 'odontogram' | 'diagnosis' | 'review'>('vitals');
+  const [examStep, setExamStep] = useState<'vitals' | 'odontogram' | 'soap-notes' | 'review'>('vitals');
   
   const [examData, setExamData] = useState<Partial<ExamData>>({
     patientId: patientId || '',
@@ -29,6 +29,8 @@ export default function SmartExam() {
     diagnosis: [],
     status: 'in_progress'
   });
+
+  const [soapNotes, setSOAPNotes] = useState<Partial<SOAPNotes> | null>(null);
 
   const updateExamData = (field: keyof ExamData, value: any) => {
     setExamData(prev => ({
@@ -70,7 +72,7 @@ export default function SmartExam() {
   const progressSteps = [
     { id: 'vitals', label: 'Vitals & Chief Complaint', completed: !!examData.chiefComplaint },
     { id: 'odontogram', label: 'Odontogram Charting', completed: Object.keys(examData.odontogramData?.teeth || {}).length > 0 },
-    { id: 'diagnosis', label: 'Clinical Notes & Diagnosis', completed: !!examData.clinicalNotes },
+    { id: 'soap-notes', label: 'SOAP Notes', completed: !!soapNotes },
     { id: 'review', label: 'Review & Complete', completed: false }
   ];
 
@@ -221,56 +223,41 @@ export default function SmartExam() {
                 Back
               </Button>
               <Button
-                onClick={() => setExamStep('diagnosis')}
+                onClick={() => setExamStep('soap-notes')}
               >
-                Continue to Diagnosis
+                Continue to SOAP Notes
               </Button>
             </div>
           </div>
         )}
 
-        {examStep === 'diagnosis' && (
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Clinical Notes & Diagnosis</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Clinical Notes
-                </label>
-                <Textarea
-                  value={examData.clinicalNotes}
-                  onChange={(e) => updateExamData('clinicalNotes', e.target.value)}
-                  placeholder="Detailed clinical observations..."
-                  rows={6}
-                />
-              </div>
+        {examStep === 'soap-notes' && (
+          <div className="space-y-4">
+            <SOAPNotesForm
+              examId={crypto.randomUUID()}
+              patientId={patientId || ''}
+              doctorId={examData.doctorId || 'current-doctor-id'}
+              odontogramData={examData.odontogramData}
+              initialData={soapNotes || undefined}
+              onSave={(notes) => {
+                setSOAPNotes(notes);
+                console.log('SOAP notes saved:', notes);
+              }}
+              onComplete={(notes) => {
+                setSOAPNotes(notes);
+                setExamStep('review');
+              }}
+            />
 
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Diagnosis (comma-separated)
-                </label>
-                <Input
-                  value={examData.diagnosis?.join(', ') || ''}
-                  onChange={(e) => updateExamData('diagnosis', e.target.value.split(',').map(d => d.trim()).filter(Boolean))}
-                  placeholder="e.g., Dental caries, Gingivitis"
-                />
-              </div>
-
-              <div className="flex justify-between">
-                <Button
-                  variant="outline"
-                  onClick={() => setExamStep('odontogram')}
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={() => setExamStep('review')}
-                >
-                  Review Exam
-                </Button>
-              </div>
+            <div className="flex justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setExamStep('odontogram')}
+              >
+                Back to Odontogram
+              </Button>
             </div>
-          </Card>
+          </div>
         )}
 
         {examStep === 'review' && (
@@ -278,34 +265,42 @@ export default function SmartExam() {
             <h2 className="text-xl font-semibold mb-4">Review Exam</h2>
             <div className="space-y-6">
               {/* Summary */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold mb-2">Chief Complaint</h3>
-                  <p className="text-gray-700">{examData.chiefComplaint}</p>
-                </div>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-semibold mb-2">Chief Complaint</h3>
+                    <p className="text-gray-700">{examData.chiefComplaint}</p>
+                  </div>
 
-                <div>
-                  <h3 className="font-semibold mb-2">Vitals</h3>
-                  <div className="space-y-1 text-sm">
-                    {examData.bloodPressure && <p>BP: {examData.bloodPressure}</p>}
-                    {examData.pulse && <p>Pulse: {examData.pulse} bpm</p>}
-                    {examData.temperature && <p>Temp: {examData.temperature}°C</p>}
+                  <div>
+                    <h3 className="font-semibold mb-2">Vitals</h3>
+                    <div className="space-y-1 text-sm">
+                      {examData.bloodPressure && <p>BP: {examData.bloodPressure}</p>}
+                      {examData.pulse && <p>Pulse: {examData.pulse} bpm</p>}
+                      {examData.temperature && <p>Temp: {examData.temperature}°C</p>}
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <h3 className="font-semibold mb-2">Clinical Notes</h3>
-                  <p className="text-gray-700">{examData.clinicalNotes || 'None'}</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Diagnosis</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {examData.diagnosis?.map(d => (
-                      <Badge key={d}>{d}</Badge>
-                    ))}
+                {/* SOAP Notes Summary */}
+                {soapNotes && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <CheckCircle2 className="size-5 text-blue-600" />
+                      <h3 className="font-semibold text-blue-900">SOAP Notes Completed</h3>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="font-medium">Primary Diagnosis:</span>
+                        <p className="text-gray-700 mt-1">{soapNotes.assessment?.primaryDiagnosis}</p>
+                      </div>
+                      <div>
+                        <span className="font-medium">Prognosis:</span>
+                        <p className="text-gray-700 mt-1">{soapNotes.assessment?.prognosis}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Teeth Requiring Treatment */}
@@ -337,9 +332,9 @@ export default function SmartExam() {
               <div className="flex justify-between pt-4 border-t">
                 <Button
                   variant="outline"
-                  onClick={() => setExamStep('diagnosis')}
+                  onClick={() => setExamStep('soap-notes')}
                 >
-                  Back to Edit
+                  Back to SOAP Notes
                 </Button>
                 <div className="flex gap-3">
                   <Button
