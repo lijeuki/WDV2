@@ -60,7 +60,9 @@ function InteractiveTooth({
       other: 0,
     };
 
-    let best: { cond: ToothCondition; priority: number; idx: number } | undefined = undefined;
+    let bestCondition: ToothCondition | undefined = undefined;
+    let bestPriority = -1;
+    let bestIdx = -1;
 
     data.conditions.forEach((cond, idx) => {
       const symbol = DENTAL_SYMBOLS[cond.symbolId];
@@ -71,12 +73,14 @@ function InteractiveTooth({
 
       const p = categoryPriority[symbol.category] ?? 0;
 
-      if (!best || p > best.priority || (p === best.priority && idx > best.idx)) {
-        best = { cond, priority: p, idx };
+      if (p > bestPriority || (p === bestPriority && idx > bestIdx)) {
+        bestCondition = cond;
+        bestPriority = p;
+        bestIdx = idx;
       }
     });
 
-    return best?.cond;
+    return bestCondition;
   };
 
   // Check if tooth is marked as missing or whole-tooth condition
@@ -596,7 +600,6 @@ export function InteractiveOdontogram({
                     key={tooth}
                     toothNumber={tooth}
                     data={teethData[tooth]}
-                    selectedSymbol={selectedSymbol || undefined}
                     onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
                     onClick={() => handleToothClick(tooth)}
                     readOnly={readOnly}
