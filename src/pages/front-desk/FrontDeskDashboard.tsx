@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../../components/layouts/DashboardLayout';
 
 export function FrontDeskDashboard() {
+  const navigate = useNavigate();
+  
   return (
     <DashboardLayout role="front-desk">
       <div className="p-8">
@@ -59,7 +62,10 @@ export function FrontDeskDashboard() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button className="flex items-center space-x-3 p-4 bg-teal-50 hover:bg-teal-100 rounded-lg transition-colors">
+            <button 
+              onClick={() => navigate('/front-desk/check-in')}
+              className="flex items-center space-x-3 p-4 bg-teal-50 hover:bg-teal-100 rounded-lg transition-colors"
+            >
               <div className="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -71,15 +77,18 @@ export function FrontDeskDashboard() {
               </div>
             </button>
             
-            <button className="flex items-center space-x-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+            <button 
+              onClick={() => navigate('/front-desk/appointments')}
+              className="flex items-center space-x-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+            >
               <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
               <div className="text-left">
-                <div className="font-medium text-gray-900">Book Appointment</div>
-                <div className="text-sm text-gray-600">Schedule new visit</div>
+                <div className="font-medium text-gray-900">View Appointments</div>
+                <div className="text-sm text-gray-600">Manage schedule</div>
               </div>
             </button>
             

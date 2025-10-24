@@ -9,6 +9,8 @@ import TreatmentPlanBuilder from './pages/doctor/TreatmentPlanBuilder';
 import NewPatient from './pages/doctor/NewPatient';
 import { FrontDeskDashboard } from './pages/front-desk/FrontDeskDashboard';
 import PostExamCheckout from './pages/front-desk/PostExamCheckout';
+import CheckIn from './pages/front-desk/CheckIn';
+import Appointments from './pages/front-desk/Appointments';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -41,6 +43,8 @@ function App() {
           {/* Front Desk Routes */}
           <Route path="/front-desk">
             <Route index element={<FrontDeskDashboard />} />
+            <Route path="check-in" element={<CheckIn />} />
+            <Route path="appointments" element={<Appointments />} />
           </Route>
           
           {/* Checkout Routes (accessible by both roles) */}
