@@ -1,35 +1,12 @@
 import { useNavigate } from 'react-router-dom';
+import { DashboardLayout } from '../../components/layouts/DashboardLayout';
 
 export function FrontDeskDashboard() {
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">WD</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">WD Dental EHR</h1>
-                <p className="text-sm text-gray-600">Front Desk Dashboard</p>
-              </div>
-            </div>
-            <button
-              onClick={() => navigate('/login')}
-              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
-      
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <DashboardLayout role="front-desk">
+      <div className="p-8">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -137,7 +114,7 @@ export function FrontDeskDashboard() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }
