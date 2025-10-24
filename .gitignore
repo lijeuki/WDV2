@@ -27,3 +27,11 @@ dist-ssr
 .env
 .env.local
 .env.production
+
+# Database helper scripts with credentials (DO NOT COMMIT)
+add-complete-seed-data.js
+check-all-data.js
+check-tables.js
+insert-seed-data.js
+run-migration-direct.js
+run-migration.js

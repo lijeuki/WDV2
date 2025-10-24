@@ -117,11 +117,25 @@ export function Login() {
         
         {/* Demo Credentials */}
         <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <div className="text-xs font-semibold text-gray-700 mb-2">Demo Accounts:</div>
+          <div className="text-xs font-semibold text-gray-700 mb-2">
+            {supabaseConfigured ? 'Demo Accounts (Setup Required):' : 'Demo Accounts:'}
+          </div>
           <div className="text-xs text-gray-600 space-y-1">
             <div>👨‍⚕️ Doctor: <span className="font-mono">doctor@clinic.com</span></div>
             <div>💼 Front Desk: <span className="font-mono">desk@clinic.com</span></div>
-            <div className="text-gray-500 mt-2">Password: any (demo mode)</div>
+            {supabaseConfigured && (
+              <>
+                <div className="text-gray-400 text-xs mt-2 pt-2 border-t border-gray-200">
+                  More roles available (see AUTHENTICATION_SETUP.md):
+                </div>
+                <div className="text-gray-400">🏥 Walking Doctor, Branch Owner, Clinic Owner</div>
+              </>
+            )}
+            <div className="text-gray-500 mt-2">
+              {supabaseConfigured 
+                ? 'See AUTHENTICATION_SETUP.md for setup instructions' 
+                : 'Password: any (demo mode)'}
+            </div>
           </div>
         </div>
       </div>
