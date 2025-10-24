@@ -22,7 +22,7 @@ import { ArrowLeft, Save, CheckCircle2, ArrowRight, Plus, Pill, ClipboardList, S
  * - Auto-legend generation
  * - Multi-step workflow (simplified version)
  */
-export default function EnhancedExam() {
+export function EnhancedExam() {
   const navigate = useNavigate();
   const { patientId } = useParams();
 
