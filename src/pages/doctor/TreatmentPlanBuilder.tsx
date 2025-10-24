@@ -5,32 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import Odontogram from '@/components/organisms/Odontogram';
-import { ExamData, ToothNumber } from '@/lib/types/dental';
-import { ArrowLeft, Plus, Trash2, Save, Send, AlertCircle, AlertTriangle } from 'lucide-react';
+import { TreatmentPlanScheduler } from '@/components/organisms/TreatmentPlanScheduler';
+import { ExamData, ToothNumber, TreatmentProcedure, TreatmentPlan } from '@/lib/types/dental';
+import { ArrowLeft, Plus, Trash2, Save, Send, AlertCircle, AlertTriangle, Calendar } from 'lucide-react';
 import { determinePostExamRouting, generateRoutingNotification, estimateCheckoutDuration } from '@/lib/workflow/post-exam-router';
-
-interface TreatmentProcedure {
-  id: string;
-  toothNumber?: ToothNumber;
-  procedureCode: string;
-  procedureName: string;
-  description: string;
-  estimatedCost: number;
-  estimatedDuration: number;
-  priority: 'urgent' | 'high' | 'normal' | 'low';
-  sequenceOrder: number;
-}
-
-interface TreatmentPlan {
-  id: string;
-  title: string;
-  description: string;
-  procedures: TreatmentProcedure[];
-  totalCost: number;
-  estimatedInsurance: number;
-  patientPortion: number;
-  status: 'draft' | 'presented' | 'accepted' | 'in_progress';
-}
+import { VisitGroup } from '@/lib/scheduling/procedure-grouping';
 
 // Common procedures library
 const COMMON_PROCEDURES = [
@@ -58,16 +37,21 @@ export default function TreatmentPlanBuilder() {
   const location = useLocation();
   const examData: ExamData | undefined = location.state?.examData;
 
-  const [treatmentPlan, setTreatmentPlan] = useState<TreatmentPlan>({
+  const [treatmentPlan, setTreatmentPlan] = useState<Partial<TreatmentPlan>>({
     id: '',
+    patientId: patientId || '',
+    doctorId: 'doctor-1', // TODO: Get from auth context
     title: 'Treatment Plan',
     description: '',
     procedures: [],
     totalCost: 0,
     estimatedInsurance: 0,
     patientPortion: 0,
-    status: 'draft'
+    status: 'draft',
+    createdAt: new Date().toISOString()
   });
+
+  const [showScheduler, setShowScheduler] = useState(false);
 
   const [selectedProcedure, setSelectedProcedure] = useState<string>('');
   const [selectedTooth, setSelectedTooth] = useState<ToothNumber | undefined>();
@@ -151,13 +135,27 @@ export default function TreatmentPlanBuilder() {
     navigate(-1);
   };
 
+  const handleScheduleAppointments = () => {
+    setShowScheduler(true);
+  };
+
+  const handleSchedulingComplete = (visitGroups: VisitGroup[]) => {
+    console.log('Scheduling complete:', visitGroups);
+    // In real app, save visit groups to database
+    alert(`✅ Success! ${visitGroups.length} appointments scheduled.`);
+    setShowScheduler(false);
+    
+    // Navigate to checkout
+    handlePresentPlan();
+  };
+
   const handlePresentPlan = () => {
     console.log('Presenting plan:', treatmentPlan);
     
     // Determine routing based on treatment complexity
     const routing = determinePostExamRouting(
       examData!,
-      treatmentPlan,
+      treatmentPlan as TreatmentPlan,
       patientId
     );
     
@@ -196,11 +194,31 @@ export default function TreatmentPlanBuilder() {
               Back
             </Button>
             <div>
-              <h1 className="text-2xl font-bold">Treatment Plan Builder</h1>
+              <h1 className="text-2xl font-bold">
+                {showScheduler ? 'Schedule Appointments' : 'Treatment Plan Builder'}
+              </h1>
               <p className="text-gray-600">Patient ID: {patientId}</p>
             </div>
           </div>
+          {showScheduler && (
+            <Button variant="outline" onClick={() => setShowScheduler(false)}>
+              <ArrowLeft className="size-4 mr-2" />
+              Back to Treatment Plan
+            </Button>
+          )}
         </div>
+
+        {/* Show either Treatment Plan Builder or Scheduler */}
+        {showScheduler ? (
+          <TreatmentPlanScheduler
+            treatmentPlanId={treatmentPlan.id || ''}
+            procedures={treatmentPlan.procedures || []}
+            patientId={patientId || ''}
+            onComplete={handleSchedulingComplete}
+          />
+        ) : (
+          <>
+          {/* Original Treatment Plan Builder content goes here */}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
@@ -388,9 +406,18 @@ export default function TreatmentPlanBuilder() {
                     Save Draft
                   </Button>
                   <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleScheduleAppointments}
+                    disabled={treatmentPlan.procedures?.length === 0}
+                  >
+                    <Calendar className="size-4 mr-2" />
+                    Schedule Appointments
+                  </Button>
+                  <Button
                     className="w-full bg-blue-600 hover:bg-blue-700"
                     onClick={handlePresentPlan}
-                    disabled={treatmentPlan.procedures.length === 0}
+                    disabled={treatmentPlan.procedures?.length === 0}
                   >
                     <Send className="size-4 mr-2" />
                     Present to Patient
@@ -400,6 +427,8 @@ export default function TreatmentPlanBuilder() {
             </Card>
           </div>
         </div>
+        </>
+        )}
       </div>
     </div>
   );

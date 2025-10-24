@@ -136,3 +136,34 @@ export const CONDITION_LABELS: Record<ToothCondition, string> = {
   wear: 'Wear',
   'to-extract': 'To Extract',
 };
+
+// =====================================================
+// Treatment Planning Types
+// =====================================================
+
+export interface TreatmentProcedure {
+  id: string;
+  toothNumber?: ToothNumber;
+  procedureCode: string;
+  procedureName: string;
+  description?: string;
+  estimatedCost: number;
+  estimatedDuration: number; // in minutes
+  priority: 'urgent' | 'high' | 'normal' | 'low';
+  sequenceOrder: number;
+}
+
+export interface TreatmentPlan {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  title: string;
+  description?: string;
+  procedures: TreatmentProcedure[];
+  totalCost: number;
+  estimatedInsurance: number;
+  patientPortion: number;
+  status: 'draft' | 'presented' | 'accepted' | 'in_progress' | 'completed';
+  createdAt: string;
+  updatedAt?: string;
+}
