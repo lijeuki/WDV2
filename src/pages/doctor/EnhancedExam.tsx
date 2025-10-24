@@ -254,46 +254,65 @@ export default function EnhancedExam() {
           </div>
         </div>
 
-        {/* Progress Indicator */}
+        {/* Progress Indicator - 4 Steps */}
         <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div className={`flex items-center gap-2 ${currentStep === 'mode-selection' ? 'text-blue-600' : currentStep === 'examination' || currentStep === 'review' ? 'text-green-600' : 'text-gray-400'}`}>
-              <div className={`size-8 rounded-full flex items-center justify-center font-bold ${
-                currentStep === 'mode-selection' ? 'bg-blue-500 text-white' : currentStep === 'examination' || currentStep === 'review' ? 'bg-green-500 text-white' : 'bg-gray-200'
+          <div className="grid grid-cols-7 items-center gap-2">
+            {/* Step 1 */}
+            <div className={`flex flex-col items-center ${currentStep === 'mode-selection' ? 'text-blue-600' : 'text-green-600'}`}>
+              <div className={`size-10 rounded-full flex items-center justify-center font-bold ${
+                currentStep === 'mode-selection' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white'
               }`}>
-                {currentStep === 'examination' || currentStep === 'review' ? <CheckCircle2 className="size-5" /> : '1'}
+                {currentStep !== 'mode-selection' ? <CheckCircle2 className="size-5" /> : '1'}
               </div>
-              <span className="font-medium">Select Mode</span>
+              <span className="text-xs mt-1">Mode</span>
             </div>
 
-            <div className="flex-1 h-1 mx-4 bg-gray-200">
+            <div className="h-1 bg-gray-200">
               <div className={`h-full bg-blue-500 transition-all`} style={{ 
-                width: currentStep === 'mode-selection' ? '0%' : currentStep === 'examination' ? '50%' : '100%' 
+                width: currentStep !== 'mode-selection' ? '100%' : '0%' 
               }} />
             </div>
 
-            <div className={`flex items-center gap-2 ${currentStep === 'examination' ? 'text-blue-600' : currentStep === 'review' ? 'text-green-600' : 'text-gray-400'}`}>
-              <div className={`size-8 rounded-full flex items-center justify-center font-bold ${
-                currentStep === 'examination' ? 'bg-blue-500 text-white' : currentStep === 'review' ? 'bg-green-500 text-white' : 'bg-gray-200'
+            {/* Step 2 */}
+            <div className={`flex flex-col items-center ${currentStep === 'examination' ? 'text-blue-600' : currentStep === 'treatment-plan' || currentStep === 'present' ? 'text-green-600' : 'text-gray-400'}`}>
+              <div className={`size-10 rounded-full flex items-center justify-center font-bold ${
+                currentStep === 'examination' ? 'bg-blue-500 text-white' : currentStep === 'treatment-plan' || currentStep === 'present' ? 'bg-green-500 text-white' : 'bg-gray-200'
               }`}>
-                {currentStep === 'review' ? <CheckCircle2 className="size-5" /> : '2'}
+                {currentStep === 'treatment-plan' || currentStep === 'present' ? <CheckCircle2 className="size-5" /> : '2'}
               </div>
-              <span className="font-medium">Examination</span>
+              <span className="text-xs mt-1">Exam</span>
             </div>
 
-            <div className="flex-1 h-1 mx-4 bg-gray-200">
+            <div className="h-1 bg-gray-200">
               <div className={`h-full bg-blue-500 transition-all`} style={{ 
-                width: currentStep === 'review' ? '100%' : '0%' 
+                width: currentStep === 'treatment-plan' || currentStep === 'present' ? '100%' : '0%' 
               }} />
             </div>
 
-            <div className={`flex items-center gap-2 ${currentStep === 'review' ? 'text-blue-600' : 'text-gray-400'}`}>
-              <div className={`size-8 rounded-full flex items-center justify-center font-bold ${
-                currentStep === 'review' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            {/* Step 3 */}
+            <div className={`flex flex-col items-center ${currentStep === 'treatment-plan' ? 'text-blue-600' : currentStep === 'present' ? 'text-green-600' : 'text-gray-400'}`}>
+              <div className={`size-10 rounded-full flex items-center justify-center font-bold ${
+                currentStep === 'treatment-plan' ? 'bg-blue-500 text-white' : currentStep === 'present' ? 'bg-green-500 text-white' : 'bg-gray-200'
               }`}>
-                3
+                {currentStep === 'present' ? <CheckCircle2 className="size-5" /> : '3'}
               </div>
-              <span className="font-medium">Review & Complete</span>
+              <span className="text-xs mt-1">Treatment</span>
+            </div>
+
+            <div className="h-1 bg-gray-200">
+              <div className={`h-full bg-blue-500 transition-all`} style={{ 
+                width: currentStep === 'present' ? '100%' : '0%' 
+              }} />
+            </div>
+
+            {/* Step 4 */}
+            <div className={`flex flex-col items-center ${currentStep === 'present' ? 'text-blue-600' : 'text-gray-400'}`}>
+              <div className={`size-10 rounded-full flex items-center justify-center font-bold ${
+                currentStep === 'present' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              }`}>
+                4
+              </div>
+              <span className="text-xs mt-1">Present</span>
             </div>
           </div>
         </Card>
@@ -353,8 +372,126 @@ export default function EnhancedExam() {
               />
             </Card>
           </div>
+        ) : currentStep === 'treatment-plan' ? (
+          /* Treatment Plan Step */
+          <div className="space-y-6">
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Treatment Plan</h2>
+                <Button onClick={() => handleAddProcedure()}>
+                  <Plus className="size-4 mr-2" />
+                  Add Procedure
+                </Button>
+              </div>
+
+              {procedures.length === 0 ? (
+                <div className="text-center py-12 border-2 border-dashed rounded-lg">
+                  <ClipboardList className="size-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-500 mb-2">No procedures added yet</p>
+                  <p className="text-sm text-gray-400">Click "Add Procedure" to create treatment plan</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {procedures.map((proc) => (
+                    <Card key={proc.id} className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            {proc.toothNumber && (
+                              <Badge variant="outline">Tooth #{proc.toothNumber}</Badge>
+                            )}
+                            <h3 className="font-semibold">{proc.procedureName}</h3>
+                          </div>
+                          <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                            <span>⏱ {proc.duration}</span>
+                            <span>💰 {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(proc.estimatedCost)}</span>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm" onClick={() => handleRemoveProcedure(proc.id)}>
+                          <ArrowLeft className="size-4" />
+                        </Button>
+                      </div>
+
+                      {proc.prescriptions.length > 0 && (
+                        <div className="mt-3 pt-3 border-t">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Pill className="size-4 text-blue-600" />
+                            <span className="text-sm font-medium">Prescriptions ({proc.prescriptions.length})</span>
+                          </div>
+                          <div className="space-y-1">
+                            {proc.prescriptions.map((rx) => (
+                              <div key={rx.id} className="text-xs bg-blue-50 p-2 rounded">
+                                <span className="font-medium">{rx.medication}</span> - {rx.dosage} • {rx.frequency}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </Card>
+          </div>
+        ) : currentStep === 'present' ? (
+          /* Present to Patient Step */
+          <div className="space-y-6">
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Treatment Plan Presentation</h2>
+              
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <Card className="p-4 bg-blue-50">
+                    <div className="text-2xl font-bold text-blue-600">{procedures.length}</div>
+                    <div className="text-sm text-gray-600">Procedures</div>
+                  </Card>
+                  <Card className="p-4 bg-purple-50">
+                    <div className="text-2xl font-bold text-purple-600">{totalPrescriptions}</div>
+                    <div className="text-sm text-gray-600">Prescriptions</div>
+                  </Card>
+                  <Card className="p-4 bg-green-50">
+                    <div className="text-2xl font-bold text-green-600">
+                      {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalCost)}
+                    </div>
+                    <div className="text-sm text-gray-600">Total Cost</div>
+                  </Card>
+                </div>
+
+                {/* Procedures List */}
+                <div>
+                  <h3 className="font-semibold mb-3">Procedures</h3>
+                  <div className="space-y-2">
+                    {procedures.map((proc, idx) => (
+                      <Card key={proc.id} className="p-3">
+                        <div className="font-medium">{idx + 1}. {proc.procedureName}</div>
+                        {proc.toothNumber && <div className="text-sm text-gray-600">Tooth #{proc.toothNumber}</div>}
+                        {proc.prescriptions.length > 0 && (
+                          <div className="text-xs text-blue-600 mt-1">
+                            + {proc.prescriptions.length} prescription(s)
+                          </div>
+                        )}
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-green-50 border-green-200">
+              <div className="flex items-start gap-3">
+                <Send className="size-5 text-green-600 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-green-900">Ready to Send to Front Desk</h3>
+                  <p className="text-sm text-green-700 mt-1">
+                    Click "Send to Front Desk" to complete the clinical examination. 
+                    The patient will proceed to the front desk for payment and scheduling.
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
         ) : (
-          /* Review Step */
+          /* Review Step (old, keeping for fallback) */
           <div className="space-y-6">
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">Examination Summary</h2>
@@ -424,7 +561,8 @@ export default function EnhancedExam() {
             <ArrowLeft className="size-4 mr-2" />
             {currentStep === 'mode-selection' ? 'Cancel' : 
              currentStep === 'examination' ? 'Back to Mode Selection' : 
-             'Back to Exam'}
+             currentStep === 'treatment-plan' ? 'Back to Examination' :
+             'Back to Treatment Plan'}
           </Button>
 
           <Button 
@@ -437,17 +575,32 @@ export default function EnhancedExam() {
               </>
             ) : currentStep === 'examination' ? (
               <>
-                Review <ArrowRight className="size-4 ml-2" />
+                Create Treatment Plan <ArrowRight className="size-4 ml-2" />
+              </>
+            ) : currentStep === 'treatment-plan' ? (
+              <>
+                Present to Patient <ArrowRight className="size-4 ml-2" />
               </>
             ) : (
               <>
-                <CheckCircle2 className="size-4 mr-2" />
-                Complete Exam
+                <Send className="size-4 mr-2" />
+                Send to Front Desk
               </>
             )}
           </Button>
         </div>
+        </div>
+        {/* End Main Content Area */}
       </div>
+      {/* End Flex Container */}
+
+      {/* Procedure Dialog */}
+      <ProcedureWithPrescriptionDialog
+        open={showProcedureDialog}
+        onOpenChange={setShowProcedureDialog}
+        onSave={handleSaveProcedure}
+        toothNumber={selectedToothForProcedure}
+      />
     </div>
   );
 }
