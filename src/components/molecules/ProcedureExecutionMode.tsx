@@ -1,5 +1,4 @@
 import { Card } from "../ui/card";
-import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
@@ -42,7 +41,7 @@ export function ProcedureExecutionMode({
         
         <RadioGroup 
           value={selectedMode || ''} 
-          onValueChange={(value) => onModeSelect(value as 'execute-pending' | 'select-new')}
+          onValueChange={(value: string) => onModeSelect(value as 'execute-pending' | 'select-new')}
           className="space-y-4"
         >
           {/* Execute Pending Procedures */}

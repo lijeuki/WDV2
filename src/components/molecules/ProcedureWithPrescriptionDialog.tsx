@@ -6,10 +6,9 @@ import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
-import { Checkbox } from '../ui/checkbox';
 import { ScrollArea } from '../ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { Pill, Plus, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Pill, Plus, Trash2, CheckCircle2 } from 'lucide-react';
 
 export interface Prescription {
   id: string;

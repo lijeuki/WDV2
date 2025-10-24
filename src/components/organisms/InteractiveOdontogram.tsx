@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Label } from "../ui/label";
 import { X, History, Download } from "lucide-react";
 import {
@@ -46,7 +46,6 @@ function InteractiveTooth({
   showNumberAbove?: boolean;
 }) {
   const [hoveredSurface, setHoveredSurface] = useState<ToothSurface | null>(null);
-  const toothType = getToothType(toothNumber);
   
   // Get surface conditions
   const getSurfaceCondition = (surface: ToothSurface): ToothCondition | undefined => {
@@ -64,7 +63,7 @@ function InteractiveTooth({
       other: 0,
     };
 
-    let best: { cond: ToothCondition; priority: number; idx: number } | null = null;
+    let best: { cond: ToothCondition; priority: number; idx: number } | undefined = undefined;
 
     data.conditions.forEach((cond, idx) => {
       const symbol = DENTAL_SYMBOLS[cond.symbolId];
@@ -330,7 +329,6 @@ function InteractiveTooth({
 }
 
 export function InteractiveOdontogram({ 
-  patientId,
   initialData = {},
   dentitionType: initialDentitionType = 'adult',
   readOnly = false,
@@ -340,7 +338,6 @@ export function InteractiveOdontogram({
 }: InteractiveOdontogramProps) {
   const [dentitionType, setDentitionType] = useState<DentitionType>(initialDentitionType);
   const [teethData, setTeethData] = useState<Record<string, ToothData>>(initialData);
-  const [selectedTooth, setSelectedTooth] = useState<string | null>(null);
   
   // Use external symbol if provided
   const selectedSymbol = externalSelectedSymbol;
@@ -426,8 +423,8 @@ export function InteractiveOdontogram({
     onDataChange?.(updated);
   };
 
-  const handleToothClick = (toothNumber: string) => {
-    setSelectedTooth(toothNumber);
+  const handleToothClick = (_toothNumber: string) => {
+    // Can be used to show tooth details dialog
   };
 
   const handleSnapshot = () => {
@@ -444,7 +441,7 @@ export function InteractiveOdontogram({
             {/* Dentition Type Toggle */}
             <div className="flex items-center gap-2">
               <Label className="text-sm">Dentition:</Label>
-              <Tabs value={dentitionType} onValueChange={(v) => setDentitionType(v as DentitionType)}>
+              <Tabs value={dentitionType} onValueChange={(v: string) => setDentitionType(v as DentitionType)}>
                 <TabsList>
                   <TabsTrigger value="adult">
                     Adult (32)

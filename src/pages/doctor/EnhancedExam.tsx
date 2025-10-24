@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Save, CheckCircle2, ArrowRight, FileText, Plus, Pill, ClipboardList, Send } from 'lucide-react';
+import { ArrowLeft, Save, CheckCircle2, ArrowRight, Plus, Pill, ClipboardList, Send } from 'lucide-react';
 
 /**
  * Enhanced Exam Workflow
