@@ -141,7 +141,7 @@ function InteractiveTooth({
             </div>
           </div>
         ) : (
-          // SVG with 5 anatomical sections - cleaner border-only style
+          // SVG with 5 anatomical sections - visible dividing lines like reference image
           <svg 
             width="45" 
             height="45" 
@@ -155,7 +155,7 @@ function InteractiveTooth({
               y="0.5"
               width="44"
               height="44"
-              fill="none"
+              fill="white"
               stroke="#1f2937"
               strokeWidth="1.5"
             />
@@ -495,14 +495,15 @@ export function InteractiveOdontogram({
           )}
         </div>
 
-        {/* Chart Layout - FDI 4-Quadrant Layout */}
+        {/* Chart Layout - FDI 4-Quadrant Layout with Pediatric teeth visible */}
         <div className="inline-block mx-auto">
           {/* Upper Quadrants */}
-          <div className="flex gap-8 mb-2">
+          <div className="flex gap-4 mb-2">
             {/* Quadrant 1 - Upper Right (18-11) */}
-            <div className="flex flex-col items-end gap-0.5">
-              <div className="flex gap-1">
-                {[...teeth.upperRight].reverse().map(tooth => (
+            <div className="flex flex-col items-end">
+              {/* Adult teeth */}
+              <div className="flex gap-[2px] mb-1">
+                {ADULT_TEETH.upperRight.map(tooth => (
                   <InteractiveTooth
                     key={tooth}
                     toothNumber={tooth}
@@ -515,15 +516,33 @@ export function InteractiveOdontogram({
                   />
                 ))}
               </div>
+              
+              {/* Pediatric teeth - smaller, centered below adult */}
+              <div className="flex gap-[2px] justify-end pr-[90px] opacity-70">
+                {PEDIATRIC_TEETH.upperRight.map(tooth => (
+                  <div key={tooth} className="scale-75">
+                    <InteractiveTooth
+                      toothNumber={tooth}
+                      data={teethData[tooth]}
+                      selectedSymbol={selectedSymbol || undefined}
+                      onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
+                      onClick={() => handleToothClick(tooth)}
+                      readOnly={readOnly}
+                      showNumberAbove={true}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Vertical Divider */}
-            <div className="w-0.5 bg-slate-400" />
+            <div className="w-[2px] bg-slate-400 mx-2" />
 
             {/* Quadrant 2 - Upper Left (21-28) */}
-            <div className="flex flex-col items-start gap-0.5">
-              <div className="flex gap-1">
-                {teeth.upperLeft.map(tooth => (
+            <div className="flex flex-col items-start">
+              {/* Adult teeth */}
+              <div className="flex gap-[2px] mb-1">
+                {ADULT_TEETH.upperLeft.map(tooth => (
                   <InteractiveTooth
                     key={tooth}
                     toothNumber={tooth}
@@ -534,20 +553,55 @@ export function InteractiveOdontogram({
                     readOnly={readOnly}
                     showNumberAbove={true}
                   />
+                ))}
+              </div>
+              
+              {/* Pediatric teeth - smaller, centered below adult */}
+              <div className="flex gap-[2px] pl-[90px] opacity-70">
+                {PEDIATRIC_TEETH.upperLeft.map(tooth => (
+                  <div key={tooth} className="scale-75">
+                    <InteractiveTooth
+                      toothNumber={tooth}
+                      data={teethData[tooth]}
+                      selectedSymbol={selectedSymbol || undefined}
+                      onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
+                      onClick={() => handleToothClick(tooth)}
+                      readOnly={readOnly}
+                      showNumberAbove={true}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
           </div>
 
           {/* Horizontal Divider */}
-          <div className="border-t-2 border-slate-400 my-2" />
+          <div className="border-t-2 border-slate-400 my-3" />
 
           {/* Lower Quadrants */}
-          <div className="flex gap-8 mt-2">
+          <div className="flex gap-4 mt-2">
             {/* Quadrant 4 - Lower Right (48-41) */}
-            <div className="flex flex-col items-end gap-0.5">
-              <div className="flex gap-1">
-                {[...teeth.lowerRight].reverse().map(tooth => (
+            <div className="flex flex-col items-end">
+              {/* Pediatric teeth - smaller, centered above adult */}
+              <div className="flex gap-[2px] justify-end pr-[90px] opacity-70 mb-1">
+                {PEDIATRIC_TEETH.lowerRight.map(tooth => (
+                  <div key={tooth} className="scale-75">
+                    <InteractiveTooth
+                      toothNumber={tooth}
+                      data={teethData[tooth]}
+                      selectedSymbol={selectedSymbol || undefined}
+                      onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
+                      onClick={() => handleToothClick(tooth)}
+                      readOnly={readOnly}
+                      showNumberAbove={false}
+                    />
+                  </div>
+                ))}
+              </div>
+              
+              {/* Adult teeth */}
+              <div className="flex gap-[2px]">
+                {ADULT_TEETH.lowerRight.map(tooth => (
                   <InteractiveTooth
                     key={tooth}
                     toothNumber={tooth}
@@ -563,12 +617,30 @@ export function InteractiveOdontogram({
             </div>
 
             {/* Vertical Divider */}
-            <div className="w-0.5 bg-slate-400" />
+            <div className="w-[2px] bg-slate-400 mx-2" />
 
             {/* Quadrant 3 - Lower Left (31-38) */}
-            <div className="flex flex-col items-start gap-0.5">
-              <div className="flex gap-1">
-                {teeth.lowerLeft.map(tooth => (
+            <div className="flex flex-col items-start">
+              {/* Pediatric teeth - smaller, centered above adult */}
+              <div className="flex gap-[2px] pl-[90px] opacity-70 mb-1">
+                {PEDIATRIC_TEETH.lowerLeft.map(tooth => (
+                  <div key={tooth} className="scale-75">
+                    <InteractiveTooth
+                      toothNumber={tooth}
+                      data={teethData[tooth]}
+                      selectedSymbol={selectedSymbol || undefined}
+                      onSurfaceClick={(surface) => handleSurfaceClick(tooth, surface)}
+                      onClick={() => handleToothClick(tooth)}
+                      readOnly={readOnly}
+                      showNumberAbove={false}
+                    />
+                  </div>
+                ))}
+              </div>
+              
+              {/* Adult teeth */}
+              <div className="flex gap-[2px]">
+                {ADULT_TEETH.lowerLeft.map(tooth => (
                   <InteractiveTooth
                     key={tooth}
                     toothNumber={tooth}
