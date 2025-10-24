@@ -1,30 +1,40 @@
 import { useState } from 'react';
+import { useAuth } from '../../lib/auth/AuthContext';
+import { isSupabaseConfigured } from '../../lib/supabase/client';
 import { useNavigate } from 'react-router-dom';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { signIn } = useAuth();
   const navigate = useNavigate();
+  const supabaseConfigured = isSupabaseConfigured();
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
     
     try {
-      // Mock login based on email for now
-      // TODO: Implement real Supabase authentication
-      if (email.includes('doctor')) {
-        navigate('/doctor');
-      } else if (email.includes('desk') || email.includes('front')) {
-        navigate('/front-desk');
+      if (supabaseConfigured) {
+        // Real authentication
+        await signIn(email, password);
       } else {
-        // Default to doctor for demo
-        navigate('/doctor');
+        // Demo mode fallback
+        console.warn('🔶 Demo mode: Supabase not configured');
+        if (email.includes('doctor')) {
+          navigate('/doctor');
+        } else if (email.includes('desk') || email.includes('front')) {
+          navigate('/front-desk');
+        } else {
+          navigate('/doctor');
+        }
       }
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login failed. Please try again.');
+    } catch (err: any) {
+      console.error('Login failed:', err);
+      setError(err.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -83,6 +93,18 @@ export function Login() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
           </div>
+          
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              {error}
+            </div>
+          )}
+          
+          {!supabaseConfigured && (
+            <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-700">
+              ⚠️ Demo Mode: Supabase not configured
+            </div>
+          )}
           
           <button
             type="submit"

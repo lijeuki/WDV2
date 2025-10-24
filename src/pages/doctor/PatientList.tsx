@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../../components/layouts/DashboardLayout';
 
 // Mock patient data
@@ -11,12 +12,18 @@ const mockPatients = [
 ];
 
 export function PatientList() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   
   const filteredPatients = mockPatients.filter(patient =>
     patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     patient.phone.includes(searchTerm)
   );
+  
+  const handleStartExam = (patientId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/doctor/exam/${patientId}`);
+  };
   
   return (
     <DashboardLayout role="doctor">
@@ -43,7 +50,10 @@ export function PatientList() {
                 </svg>
               </div>
             </div>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+            <button 
+              onClick={() => navigate('/doctor/patients/new')}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
               + Add New Patient
             </button>
           </div>
@@ -88,10 +98,19 @@ export function PatientList() {
               </div>
               
               <div className="flex space-x-2">
-                <button className="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alert(`Patient profile for ${patient.name} - Coming soon!`);
+                  }}
+                  className="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
                   View Profile
                 </button>
-                <button className="px-3 py-2 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                <button 
+                  onClick={(e) => handleStartExam(patient.id, e)}
+                  className="px-3 py-2 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                >
                   Start Exam
                 </button>
               </div>
