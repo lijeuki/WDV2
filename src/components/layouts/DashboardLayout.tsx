@@ -50,20 +50,41 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
   };
 
   const navItems = navigationItems[role] || [];
+  const roleColors = getRoleColors();
 
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
-  const getRoleColor = () => {
+  const getRoleColors = () => {
     const colors = {
-      doctor: 'blue',
-      'front-desk': 'teal',
-      'clinic-pic': 'purple',
-      'branch-owner': 'indigo',
-      'super-admin': 'red',
+      doctor: {
+        bg: 'bg-blue-600',
+        hoverBg: 'bg-blue-50',
+        text: 'text-blue-700',
+      },
+      'front-desk': {
+        bg: 'bg-teal-600',
+        hoverBg: 'bg-teal-50',
+        text: 'text-teal-700',
+      },
+      'clinic-pic': {
+        bg: 'bg-purple-600',
+        hoverBg: 'bg-purple-50',
+        text: 'text-purple-700',
+      },
+      'branch-owner': {
+        bg: 'bg-indigo-600',
+        hoverBg: 'bg-indigo-50',
+        text: 'text-indigo-700',
+      },
+      'super-admin': {
+        bg: 'bg-red-600',
+        hoverBg: 'bg-red-50',
+        text: 'text-red-700',
+      },
     };
-    return colors[role] || 'blue';
+    return colors[role] || colors.doctor;
   };
 
   const getRoleLabel = () => {
@@ -90,7 +111,7 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
           {sidebarOpen ? (
             <>
               <div className="flex items-center space-x-3">
-                <div className={`w-8 h-8 bg-${getRoleColor()}-600 rounded-lg flex items-center justify-center`}>
+                <div className={`w-8 h-8 ${roleColors.bg} rounded-lg flex items-center justify-center`}>
                   <span className="text-white font-bold text-sm">WD</span>
                 </div>
                 <div>
@@ -127,7 +148,7 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
               onClick={() => navigate(item.path)}
               className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-all ${
                 isActive(item.path)
-                  ? `bg-${getRoleColor()}-50 text-${getRoleColor()}-700 font-medium`
+                  ? `${roleColors.hoverBg} ${roleColors.text} font-medium`
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
