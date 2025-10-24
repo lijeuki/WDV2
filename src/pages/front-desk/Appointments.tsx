@@ -4,6 +4,7 @@
  */
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -100,6 +101,7 @@ const mockAppointments: Appointment[] = [
 ];
 
 export default function Appointments() {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'day' | 'week' | 'month'>('day');
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
@@ -168,7 +170,7 @@ export default function Appointments() {
             <h1 className="text-2xl font-bold">Appointments</h1>
             <p className="text-gray-600">Manage patient appointments and schedule</p>
           </div>
-          <Button onClick={() => alert('New appointment form coming soon!')}>
+          <Button onClick={() => navigate('/front-desk/appointments/book')}>
             <Plus className="size-4 mr-2" />
             New Appointment
           </Button>

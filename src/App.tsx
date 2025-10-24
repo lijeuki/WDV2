@@ -14,6 +14,7 @@ import PostExamCheckout from './pages/front-desk/PostExamCheckout';
 import CheckIn from './pages/front-desk/CheckIn';
 import Appointments from './pages/front-desk/Appointments';
 import Payments from './pages/front-desk/Payments';
+import { BookAppointment } from './pages/front-desk/BookAppointment';
 import ClinicDashboard from './pages/clinic/ClinicDashboard';
 import StaffManagement from './pages/clinic/StaffManagement';
 import InventoryManagement from './pages/clinic/InventoryManagement';
@@ -55,6 +56,7 @@ function App() {
             <Route index element={<FrontDeskDashboard />} />
             <Route path="check-in" element={<CheckIn />} />
             <Route path="appointments" element={<Appointments />} />
+            <Route path="appointments/book" element={<BookAppointment />} />
             <Route path="payments" element={<Payments />} />
           </Route>
           

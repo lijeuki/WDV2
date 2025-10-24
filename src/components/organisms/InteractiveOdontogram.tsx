@@ -165,11 +165,12 @@ function InteractiveTooth({
             <polygon
               points="0,0 45,0 29,16 16,16"
               fill={getSurfaceColor('occlusal')}
-              stroke="none"
+              stroke="#1f2937"
+              strokeWidth="0.5"
               className="cursor-pointer transition-all hover:opacity-80"
               style={{ 
                 pointerEvents: 'all',
-                opacity: hoveredSurface === 'occlusal' ? 0.9 : (getSurfaceColor('occlusal') !== '#ffffff' ? 0.6 : 0)
+                opacity: hoveredSurface === 'occlusal' ? 0.9 : (getSurfaceColor('occlusal') !== '#ffffff' ? 0.6 : 0.1)
               }}
               onMouseEnter={() => setHoveredSurface('occlusal')}
               onMouseLeave={() => setHoveredSurface(null)}
@@ -185,11 +186,12 @@ function InteractiveTooth({
             <polygon
               points="0,0 0,45 16,29 16,16"
               fill={getSurfaceColor('mesial')}
-              stroke="none"
+              stroke="#1f2937"
+              strokeWidth="0.5"
               className="cursor-pointer transition-all hover:opacity-80"
               style={{ 
                 pointerEvents: 'all',
-                opacity: hoveredSurface === 'mesial' ? 0.9 : (getSurfaceColor('mesial') !== '#ffffff' ? 0.6 : 0)
+                opacity: hoveredSurface === 'mesial' ? 0.9 : (getSurfaceColor('mesial') !== '#ffffff' ? 0.6 : 0.1)
               }}
               onMouseEnter={() => setHoveredSurface('mesial')}
               onMouseLeave={() => setHoveredSurface(null)}
@@ -205,11 +207,12 @@ function InteractiveTooth({
             <polygon
               points="45,0 45,45 29,29 29,16"
               fill={getSurfaceColor('distal')}
-              stroke="none"
+              stroke="#1f2937"
+              strokeWidth="0.5"
               className="cursor-pointer transition-all hover:opacity-80"
               style={{ 
                 pointerEvents: 'all',
-                opacity: hoveredSurface === 'distal' ? 0.9 : (getSurfaceColor('distal') !== '#ffffff' ? 0.6 : 0)
+                opacity: hoveredSurface === 'distal' ? 0.9 : (getSurfaceColor('distal') !== '#ffffff' ? 0.6 : 0.1)
               }}
               onMouseEnter={() => setHoveredSurface('distal')}
               onMouseLeave={() => setHoveredSurface(null)}
@@ -225,11 +228,12 @@ function InteractiveTooth({
             <polygon
               points="0,45 45,45 29,29 16,29"
               fill={getSurfaceColor('lingual')}
-              stroke="none"
+              stroke="#1f2937"
+              strokeWidth="0.5"
               className="cursor-pointer transition-all hover:opacity-80"
               style={{ 
                 pointerEvents: 'all',
-                opacity: hoveredSurface === 'lingual' ? 0.9 : (getSurfaceColor('lingual') !== '#ffffff' ? 0.6 : 0)
+                opacity: hoveredSurface === 'lingual' ? 0.9 : (getSurfaceColor('lingual') !== '#ffffff' ? 0.6 : 0.1)
               }}
               onMouseEnter={() => setHoveredSurface('lingual')}
               onMouseLeave={() => setHoveredSurface(null)}
@@ -249,11 +253,11 @@ function InteractiveTooth({
               height="13"
               fill={getSurfaceColor('buccal')}
               stroke="#1f2937"
-              strokeWidth="1"
+              strokeWidth="0.5"
               className="cursor-pointer transition-all hover:opacity-80"
               style={{ 
                 pointerEvents: 'all',
-                opacity: hoveredSurface === 'buccal' ? 0.9 : (getSurfaceColor('buccal') !== '#ffffff' ? 0.6 : 0)
+                opacity: hoveredSurface === 'buccal' ? 0.9 : (getSurfaceColor('buccal') !== '#ffffff' ? 0.6 : 0.1)
               }}
               onMouseEnter={() => setHoveredSurface('buccal')}
               onMouseLeave={() => setHoveredSurface(null)}
